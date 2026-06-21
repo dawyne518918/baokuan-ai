@@ -225,9 +225,10 @@ function getExtra(){return $('extraDetails').value.trim()}
 function getCore(){return $('coreMessage').value.trim()}
 function getTags(){return $('tags').value.split(',').map(t=>t.trim()).filter(Boolean)}
 
-function getApiKey(){if(!apiKey)apiKey=localStorage.getItem('hbs_ds_key')||'';return apiKey}
-function saveApiKey(){const k=$('apiKeyInput').value.trim();if(!k||!k.startsWith('sk-')){showToast('请输入有效的DEEPSEEK API Key（sk-开头）');return}localStorage.setItem('hbs_ds_key',k);apiKey=k;updateApiBadge();$('apiKeyInput').value='';showToast('API Key已保存')}
-function updateApiBadge(){const k=getApiKey();$('apiBadge').textContent=k?'🤖 AI就绪':'🤖 未配置';$('apiBadge').className='api-badge '+(k?'on':'off')}
+function getApiKey(){return apiKey}
+async function loadApiKey(){const{data}=await sb.from('app_config').select('value').eq('key','deepseek_key').maybeSingle();apiKey=(data&&data.value)||'';updateApiBadge();return apiKey}
+async function saveApiKey(){const k=$('apiKeyInput').value.trim();if(!k||!k.startsWith('sk-')){showToast('请输入有效的 DeepSeek API Key（sk-开头）');return}await sb.from('app_config').upsert({key:'deepseek_key',value:k});apiKey=k;updateApiBadge();$('apiKeyInput').value='';showToast('✅ API Key 已保存到云端，所有用户可用')}
+function updateApiBadge(){const b=$('apiBadge');b.textContent=apiKey?'🤖 AI就绪':'🤖 未配置';b.className='api-badge '+(apiKey?'on':'off')}
 
 async function dbGetUser(u){const{data}=await sb.from('user_points').select('*').eq('username',u).maybeSingle();return data}
 async function dbGetPoints(u){const{data}=await sb.from('user_points').select('points').eq('username',u).maybeSingle();return data?data.points:DEFAULT_POINTS}
@@ -367,7 +368,7 @@ function toggleTheme(){const h=document.documentElement;h.setAttribute('data-the
 
 document.querySelectorAll('.persona-card').forEach(c=>c.addEventListener('click',()=>{document.querySelectorAll('.persona-card').forEach(x=>x.classList.remove('active'));c.classList.add('active');$('persona').value=c.dataset.persona}));
 $('bizType').addEventListener('change',function(){const c=$('bizTypeCustom');if(c)c.style.display=this.value==='custom'?'block':'none'});
-(async function init(){const t=localStorage.getItem('hbs_theme');if(t)document.documentElement.setAttribute('data-theme',t);apiKey=getApiKey();updateApiBadge();const lu=localStorage.getItem('hbs_last_user');if(lu){const d=await dbGetUser(lu);if(d&&d.password)currentUser={username:lu,createdAt:d.created_at}}await updateAuthUI();renderTemplatesPage();if(location.hash==='#admin')switchPage('admin')})();
+(async function init(){const t=localStorage.getItem('hbs_theme');if(t)document.documentElement.setAttribute('data-theme',t);await loadApiKey();const lu=localStorage.getItem('hbs_last_user');if(lu){const d=await dbGetUser(lu);if(d&&d.password)currentUser={username:lu,createdAt:d.created_at}}await updateAuthUI();renderTemplatesPage();if(location.hash==='#admin')switchPage('admin')})();
 </script>
 </body>
 </html>
