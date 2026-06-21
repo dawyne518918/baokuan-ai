@@ -323,9 +323,13 @@ function getCore(){return $('coreMessage').value.trim()}
 function getTags(){return $('tags').value.split(',').map(t=>t.trim()).filter(Boolean)}
 
 /* ═════════ SUPABASE DATA OPS ═════════ */
+async function dbGetUser(uname){
+  const{data}=await sb.from('user_points').select('*').eq('username',uname).maybeSingle();
+  return data;
+}
 async function dbGetPoints(uname){
-  const{data,error}=await sb.from('user_points').select('points').eq('username',uname).maybeSingle();
-  if(error||!data){await sb.from('user_points').insert({username:uname,points:DEFAULT_POINTS});return DEFAULT_POINTS}
+  const{data}=await sb.from('user_points').select('points').eq('username',uname).maybeSingle();
+  if(!data){await sb.from('user_points').insert({username:uname,points:DEFAULT_POINTS,password:''});return DEFAULT_POINTS}
   return data.points;
 }
 async function dbSetPoints(uname,pts){
@@ -405,17 +409,17 @@ async function doAuth(){
     const cp=$('authConfirmPw').value.trim(),ic=$('authInviteCode').value.trim();
     if(p!==cp){showToast('两次密码不一致');return}
     if(!ic){showToast('请输入邀请码');return}
-    if(localStorage.getItem('hbs_user_'+u)){showToast('用户名已存在');return}
+    const exist=await dbGetUser(u);
+    if(exist&&exist.password){showToast('用户名已存在');return}
     const invite=await dbUseInviteCode(ic);
     if(!invite){showToast('邀请码无效或已被使用');return}
     const pts=invite.points||DEFAULT_POINTS;
-    localStorage.setItem('hbs_user_'+u,JSON.stringify({username:u,password:p,createdAt:new Date().toISOString(),points:pts}));
-    await dbSetPoints(u,pts);
+    await sb.from('user_points').upsert({username:u,password:p,points:pts,created_at:new Date().toISOString(),updated_at:new Date().toISOString()});
     showToast('注册成功！获得 '+pts+' 积分，请登录');toggleAuthMode();return;
   }
-  const d=JSON.parse(localStorage.getItem('hbs_user_'+u)||'null');
+  const d=await dbGetUser(u);
   if(!d||d.password!==p){showToast('用户名或密码错误');return}
-  currentUser={username:u,createdAt:d.createdAt};localStorage.setItem('hbs_last_user',u);
+  currentUser={username:u,createdAt:d.created_at};localStorage.setItem('hbs_last_user',u);
   await updateAuthUI();closeAuth();await renderLibrary();showToast('欢迎回来，'+u+'！剩余 '+(await getUserPoints())+' 积分');
 }
 async function updateAuthUI(){
