@@ -3,8 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="本地生活商家AI口播脚本生成器，DeepSeek驱动，每次生成独一无二的爆款文案">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✨</text></svg>">
 <title>爆款文案AI — DeepSeek智能口播脚本生成器</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -12,12 +10,12 @@
 :root{--bg:#F8FAFC;--surface:#fff;--border:#e2e8f0;--text:#1e293b;--text2:#64748b;--text3:#94a3b8;--accent:#F28482;--accent2:#FFB347;--green:#059669;--green-bg:#ECFDF5;--shadow:0 10px 30px -10px rgba(0,0,0,0.1)}
 [data-theme="dark"]{--bg:#0f172a;--surface:#1e293b;--border:#334155;--text:#f1f5f9;--text2:#94a3b8;--text3:#64748b;--green-bg:#064e3b;--shadow:0 10px 30px -10px rgba(0,0,0,0.3)}
 *{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}
-body{background:var(--bg);font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:var(--text);line-height:1.6}
+body{background:var(--bg);font-family:'Inter',sans-serif;color:var(--text);line-height:1.6}
 .nav{position:sticky;top:0;z-index:100;background:var(--surface);border-bottom:1px solid var(--border);padding:10px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px}
-.nav-logo{font-size:1.1rem;font-weight:700;color:var(--text);display:flex;align-items:center;gap:6px;white-space:nowrap}
-.nav-logo span{background:linear-gradient(90deg,#FFB347,#E5A1F5);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.nav-links{display:flex;gap:4px;list-style:none;align-items:center;flex-wrap:wrap}
-.nav-links a,.nav-links button{text-decoration:none;color:var(--text2);font-size:.8rem;font-weight:500;background:none;border:none;cursor:pointer;font-family:inherit;padding:5px 10px;border-radius:7px;transition:all .15s;white-space:nowrap}
+.nav-logo{font-size:1.1rem;font-weight:700;color:var(--text);display:flex;align-items:center;gap:6px}
+.nav-logo span{background:linear-gradient(90deg,#FFB347,#E5A1F5);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.nav-links{display:flex;gap:4px;list-style:none;align-items:center}
+.nav-links a,.nav-links button{text-decoration:none;color:var(--text2);font-size:.8rem;font-weight:500;background:none;border:none;cursor:pointer;font-family:inherit;padding:5px 10px;border-radius:7px;transition:all .15s}
 .nav-links a:hover,.nav-links button:hover{color:var(--text);background:var(--bg)}
 .nav-links a.active,.nav-links button.active{color:var(--accent);font-weight:600}
 .nav-right{display:flex;align-items:center;gap:8px}
@@ -27,13 +25,13 @@ body{background:var(--bg);font-family:'Inter',-apple-system,BlinkMacSystemFont,'
 .page{display:none}.page.active{display:block}
 .container{max-width:1100px;margin:0 auto;padding:0 20px}
 .hero{text-align:center;padding:50px 20px 30px;max-width:800px;margin:0 auto}
-.hero-badge{display:inline-block;font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:1px;background:linear-gradient(90deg,#F5C344,#F28482,#B567C2);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:12px;padding:4px 14px;border:1px solid var(--border);border-radius:20px}
+.hero-badge{display:inline-block;font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:1px;background:linear-gradient(90deg,#F5C344,#F28482,#B567C2);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:12px;padding:4px 14px;border:1px solid var(--border);border-radius:20px}
 .hero h1{font-size:2.2rem;font-weight:700;color:var(--text);letter-spacing:-.03em;margin-bottom:10px}
-.hero h1 span{background:linear-gradient(135deg,#FFB347,#F28482,#B567C2);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero h1 span{background:linear-gradient(135deg,#FFB347,#F28482,#B567C2);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .hero p{font-size:.9rem;color:var(--text2);max-width:500px;margin:0 auto}
 .c1-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-bottom:60px}
-.c1-card{border-radius:24px;height:320px;display:flex;flex-direction:column;justify-content:flex-end;position:relative;overflow:hidden;text-align:left;background:var(--bg);box-shadow:var(--shadow);transition:transform .3s ease,box-shadow .3s ease}
-.c1-card:hover{transform:translateY(-4px);box-shadow:0 20px 50px -15px rgba(0,0,0,.15)}
+.c1-card{border-radius:24px;height:320px;display:flex;flex-direction:column;justify-content:flex-end;position:relative;overflow:hidden;text-align:left;background:var(--bg);box-shadow:var(--shadow);transition:transform .3s ease}
+.c1-card:hover{transform:translateY(-4px)}
 .c1-card h3{font-size:1rem;font-weight:700;color:var(--text);padding:0 24px 24px;z-index:2;position:relative}
 .c1-card .c1-sub{font-size:.72rem;color:var(--text2);padding:0 24px 6px;z-index:2;position:relative}
 .c1-card-1{background:linear-gradient(160deg,#FFF5EB 0%,#FFF9F0 30%,#FDF2F8 70%,#F4F8F9 100%)}
@@ -51,28 +49,21 @@ body{background:var(--bg);font-family:'Inter',-apple-system,BlinkMacSystemFont,'
 @keyframes blink{50%{opacity:0}}
 .c1-card-2 .c1-visual{position:absolute;top:20px;left:0;right:0;bottom:70px;display:flex;align-items:center;justify-content:center;z-index:1}
 .c1-card-2 .c1-platform-cards{display:flex;gap:10px;align-items:center}
-.c1-card-2 .c1-pf-card{background:#fff;border-radius:10px;padding:10px 12px;box-shadow:0 3px 12px rgba(0,0,0,.05);font-size:.55rem;line-height:1.4;width:90px;position:relative}
+.c1-card-2 .c1-pf-card{background:#fff;border-radius:10px;padding:10px 12px;box-shadow:0 3px 12px rgba(0,0,0,.05);font-size:.55rem;line-height:1.4;width:90px}
 .c1-card-2 .c1-pf-card:nth-child(1){transform:rotate(-3deg);border-top:3px solid #111}
 .c1-card-2 .c1-pf-card:nth-child(2){transform:rotate(0deg) translateY(-6px);border-top:3px solid #FF2442;z-index:1}
 .c1-card-2 .c1-pf-card:nth-child(3){transform:rotate(3deg);border-top:3px solid #FA9D3B}
 .c1-card-2 .c1-pf-card .c1-pf-badge{font-size:.5rem;font-weight:700;margin-bottom:4px}
-.c1-card-2 .c1-pf-card:nth-child(1) .c1-pf-badge{color:#111}
-.c1-card-2 .c1-pf-card:nth-child(2) .c1-pf-badge{color:#FF2442}
-.c1-card-2 .c1-pf-card:nth-child(3) .c1-pf-badge{color:#FA9D3B}
 .c1-card-2 .c1-pf-card .c1-pf-text{color:#94a3b8;font-size:.5rem}
 .c1-card-2 .c1-pf-card .c1-pf-text b{color:#64748b}
 .c1-card-3 .c1-visual{position:absolute;top:18px;left:0;right:0;bottom:70px;display:flex;align-items:center;justify-content:center;z-index:1}
 .c1-card-3 .c1-shelf{display:flex;gap:14px;align-items:flex-end}
-.c1-card-3 .c1-doc{background:#fff;border-radius:10px 10px 4px 4px;box-shadow:0 4px 16px rgba(0,0,0,.06);position:relative;display:flex;flex-direction:column;align-items:center}
+.c1-card-3 .c1-doc{background:#fff;border-radius:10px 10px 4px 4px;box-shadow:0 4px 16px rgba(0,0,0,.06);display:flex;flex-direction:column;align-items:center}
 .c1-card-3 .c1-doc:nth-child(1){width:48px;height:64px;border-left:3px solid #FFB347}
 .c1-card-3 .c1-doc:nth-child(2){width:54px;height:76px;border-left:3px solid #E5A1F5;transform:translateY(-4px)}
 .c1-card-3 .c1-doc:nth-child(3){width:48px;height:60px;border-left:3px solid #F28482}
 .c1-card-3 .c1-doc .c1-doc-line{height:3px;border-radius:2px;background:#e2e8f0;margin-top:8px}
-.c1-card-3 .c1-doc:nth-child(1) .c1-doc-line{width:24px}
-.c1-card-3 .c1-doc:nth-child(2) .c1-doc-line{width:28px;margin-top:10px}
-.c1-card-3 .c1-doc:nth-child(2) .c1-doc-line:nth-child(3){width:18px}
-.c1-card-3 .c1-doc:nth-child(3) .c1-doc-line{width:22px}
-.c1-card-3 .c1-search-badge{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);background:#fff;border-radius:20px;padding:5px 14px;font-size:.7rem;color:var(--text2);box-shadow:0 2px 10px rgba(0,0,0,.06);display:flex;align-items:center;gap:6px}
+.c1-card-3 .c1-search-badge{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);background:#fff;border-radius:20px;padding:5px 14px;font-size:.7rem;color:var(--text2);box-shadow:0 2px 10px rgba(0,0,0,.06)}
 .section-generator{max-width:900px;margin:0 auto 50px}
 .section-title{text-align:center;margin-bottom:28px}
 .section-title h2{font-size:1.6rem;font-weight:700;color:var(--text);margin-bottom:4px}
@@ -99,52 +90,46 @@ body{background:var(--bg);font-family:'Inter',-apple-system,BlinkMacSystemFont,'
 .result-panel{margin-top:24px;display:none}
 .result-panel.visible{display:block}
 .result-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px}
-.result-badge{font-size:.7rem;font-weight:600;color:var(--green);background:var(--green-bg);padding:5px 12px;border-radius:16px;display:flex;align-items:center;gap:5px}
+.result-badge{font-size:.7rem;font-weight:600;color:var(--green);background:var(--green-bg);padding:5px 12px;border-radius:16px}
 .result-actions{display:flex;gap:6px;flex-wrap:wrap}
 .btn-action{padding:6px 12px;border:1.5px solid var(--border);border-radius:8px;background:var(--surface);font-size:.73rem;font-weight:500;cursor:pointer;font-family:inherit;color:var(--text2);display:flex;align-items:center;gap:4px;transition:all .15s}
 .btn-action:hover{border-color:var(--text3);color:var(--text)}
-.btn-action.danger{color:#ef4444;border-color:#fecaca}
-.btn-action.danger:hover{background:#fef2f2}
+.btn-action.danger{color:#ef4444;border-color:#fecaca}.btn-action.danger:hover{background:#fef2f2}
 .btn-action.save{background:var(--green-bg);color:var(--green);border-color:#A7F3D0;font-weight:600}
-.script-card{background:var(--surface);border-radius:14px;padding:28px;box-shadow:0 1px 3px rgba(0,0,0,.06),0 20px 60px -20px rgba(0,0,0,.08);position:relative;overflow:hidden}
+.script-card{background:var(--surface);border-radius:14px;padding:28px;box-shadow:0 1px 3px rgba(0,0,0,.06),0 20px 60px -20px rgba(0,0,0,.08);position:relative}
 .script-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#FFB347,#F28482,#E5A1F5)}
 .script-title{font-size:.65rem;font-weight:600;text-transform:uppercase;letter-spacing:.8px;color:var(--accent);margin-bottom:12px}
 .script-content{font-size:.87rem;line-height:1.9;color:var(--text);white-space:pre-wrap}
 .script-content[contenteditable="true"]{border:2px dashed var(--border);border-radius:8px;padding:10px;background:var(--bg);outline:none}
-.script-content[contenteditable="true"]:focus{border-color:var(--accent2)}
 .script-analysis{margin-top:18px}
 .analysis-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
 .analysis-item{background:var(--bg);border-radius:8px;padding:10px;border:1px solid var(--border)}
 .analysis-item .label{font-size:.6rem;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:var(--text3)}
 .analysis-item .value{font-size:.75rem;color:var(--text);margin-top:2px;font-weight:500}
-.broll-section{margin-top:16px}
-.broll-section h4{font-size:.8rem;font-weight:600;color:var(--text);margin-bottom:8px}
+.broll-section{margin-top:16px}.broll-section h4{font-size:.8rem;font-weight:600;color:var(--text);margin-bottom:8px}
 .broll-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:6px}
 .broll-item{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:8px;font-size:.7rem;color:var(--text2)}
 .broll-item strong{color:var(--accent);display:block;font-size:.65rem;margin-bottom:2px}
 .batch-panel{margin-top:24px}.batch-panel h3{font-size:1.1rem;font-weight:700;margin-bottom:16px;color:var(--text)}
 .batch-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
 .batch-card{background:var(--surface);border-radius:14px;border:1px solid var(--border);overflow:hidden}
-.batch-card .bc-header{padding:12px 16px;font-size:.7rem;font-weight:600;color:var(--accent);border-bottom:1px solid var(--border);background:var(--bg);display:flex;justify-content:space-between;align-items:center}
+.batch-card .bc-header{padding:12px 16px;font-size:.7rem;font-weight:600;color:var(--accent);border-bottom:1px solid var(--border);background:var(--bg)}
 .batch-card .bc-body{padding:16px;font-size:.75rem;line-height:1.8;color:var(--text);white-space:pre-wrap;max-height:300px;overflow-y:auto}
-.batch-card .bc-actions{padding:10px 16px;border-top:1px solid var(--border);display:flex;gap:6px;flex-wrap:wrap}
+.batch-card .bc-actions{padding:10px 16px;border-top:1px solid var(--border);display:flex;gap:6px}
 .library-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
 .library-card{background:var(--surface);border-radius:12px;padding:16px;border:1px solid var(--border);cursor:pointer;transition:all .15s}
-.library-card:hover{border-color:var(--accent2);box-shadow:0 3px 16px -6px rgba(0,0,0,.08)}
+.library-card:hover{border-color:var(--accent2)}
 .library-card .lc-header{display:flex;justify-content:space-between;align-items:start;margin-bottom:6px}
 .library-card .lc-meta{font-size:.65rem;color:var(--accent);font-weight:600}
 .library-card .lc-date{font-size:.65rem;color:var(--text3)}
 .library-card .lc-preview{font-size:.75rem;color:var(--text2);line-height:1.5;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
-.library-card .lc-tags{display:flex;gap:4px;margin-top:8px;flex-wrap:wrap}
-.library-card .lc-tag{font-size:.6rem;padding:2px 6px;border-radius:5px;background:var(--bg);color:var(--text2)}
 .library-filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
 .library-filters select,.library-filters input{padding:7px 10px;border:1.5px solid var(--border);border-radius:8px;font-size:.75rem;background:var(--surface);color:var(--text);font-family:inherit}
 .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;align-items:center;justify-content:center}
 .modal-overlay.active{display:flex}
 .modal{background:var(--surface);border-radius:16px;padding:28px;max-width:420px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,.2);max-height:90vh;overflow-y:auto}
 .modal h2{font-size:1.2rem;font-weight:700;margin-bottom:18px;color:var(--text)}
-.modal .form-group{margin-bottom:12px}
-.modal .btn-row{margin-top:16px}
+.modal .form-group{margin-bottom:12px}.modal .btn-row{margin-top:16px}
 .modal .modal-switch{text-align:center;margin-top:12px;font-size:.78rem;color:var(--text2)}
 .modal .modal-switch a{color:var(--accent);cursor:pointer;font-weight:600;text-decoration:none}
 .stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:28px}
@@ -156,14 +141,12 @@ body{background:var(--bg);font-family:'Inter',-apple-system,BlinkMacSystemFont,'
 .spinner{display:none;width:16px;height:16px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite}
 .spinner.active{display:inline-block}
 @keyframes spin{to{transform:rotate(360deg)}}
-.empty-state{text-align:center;padding:50px 20px;color:var(--text3)}
-.empty-state .icon{font-size:2.5rem;margin-bottom:10px}
+.empty-state{text-align:center;padding:50px 20px;color:var(--text3)}.empty-state .icon{font-size:2.5rem;margin-bottom:10px}
 .template-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
 .alert{padding:10px 16px;border-radius:10px;font-size:.8rem;margin-bottom:16px;display:flex;align-items:center;gap:8px}
 .alert-warn{background:#FEF3C7;color:#92400e;border:1px solid #FCD34D}
 .api-badge{display:inline-block;font-size:.65rem;font-weight:600;padding:3px 8px;border-radius:6px;margin-left:4px}
-.api-badge.on{background:#ECFDF5;color:#059669}
-.api-badge.off{background:#FEF2F2;color:#DC2626}
+.api-badge.on{background:#ECFDF5;color:#059669}.api-badge.off{background:#FEF2F2;color:#DC2626}
 @media(max-width:900px){.c1-grid{grid-template-columns:repeat(2,1fr)}.form-grid{grid-template-columns:1fr}.persona-cards{grid-template-columns:repeat(2,1fr)}.analysis-grid{grid-template-columns:1fr}.stats-row{grid-template-columns:repeat(2,1fr)}.batch-grid{grid-template-columns:1fr}.library-grid{grid-template-columns:1fr}.broll-grid{grid-template-columns:1fr}.template-grid{grid-template-columns:1fr}}
 @media(max-width:600px){.hero h1{font-size:1.6rem}.c1-grid{grid-template-columns:1fr}.form-panel{padding:18px}.persona-cards{grid-template-columns:1fr 1fr}.script-card{padding:18px}}
 </style>
@@ -171,130 +154,68 @@ body{background:var(--bg);font-family:'Inter',-apple-system,BlinkMacSystemFont,'
 <body>
 <nav class="nav">
   <div class="nav-logo">✦ <span>爆款文案AI</span></div>
-  <ul class="nav-links" id="navLinks">
-    <li><a href="#generator" class="active" onclick="switchPage('generator')">🎬 生成</a></li>
-    <li><a href="#library" onclick="switchPage('library')">📚 文案库</a></li>
-    <li><a href="#templates" onclick="switchPage('templates')">📋 模板</a></li>
-    <li><button onclick="switchPage('stats')">📊 统计</button></li>
-  </ul>
-  <div class="nav-right">
-    <span class="api-badge off" id="apiBadge" title="AI引擎状态">🤖 未配置</span>
-    <span class="nav-points" id="pointsDisplay">⭐ 600</span>
-    <button class="btn-theme" onclick="toggleTheme()">🌓</button>
-    <a href="#admin" onclick="switchPage('admin');return false" style="font-size:.7rem;color:var(--text3);text-decoration:none;padding:2px 4px">🔑</a>
-    <span class="nav-user" id="usernameDisplay" onclick="switchPage('profile')">未登录</span>
-    <button onclick="handleAuthBtn()" id="authBtn" style="font-size:.75rem;padding:5px 10px;background:linear-gradient(135deg,#FFB347,#F28482);color:#fff;border:none;border-radius:7px;cursor:pointer;font-family:inherit;font-weight:600">登录</button>
-  </div>
+  <ul class="nav-links"><li><a href="#generator" class="active" onclick="switchPage('generator')">🎬 生成</a></li><li><a href="#library" onclick="switchPage('library')">📚 文案库</a></li><li><a href="#templates" onclick="switchPage('templates')">📋 模板</a></li><li><button onclick="switchPage('stats')">📊 统计</button></li></ul>
+  <div class="nav-right"><span class="api-badge off" id="apiBadge">🤖 未配置</span><span class="nav-points" id="pointsDisplay">⭐ 600</span><button class="btn-theme" onclick="toggleTheme()">🌓</button><a href="#admin" onclick="switchPage('admin');return false" style="font-size:.7rem;color:var(--text3);text-decoration:none">🔑</a><span class="nav-user" id="usernameDisplay">未登录</span><button onclick="handleAuthBtn()" id="authBtn" style="font-size:.75rem;padding:5px 10px;background:linear-gradient(135deg,#FFB347,#F28482);color:#fff;border:none;border-radius:7px;cursor:pointer;font-family:inherit;font-weight:600">登录</button></div>
 </nav>
 
 <div class="page active" id="page-generator">
-  <section class="hero"><div class="hero-badge">🚀 DeepSeek AI 驱动 · 本地生活专用</div><h1>从<span>一句话</span>到<span>爆款脚本</span><br>AI 实时创作，每次独一无二</h1><p>选人设、填细节、点生成 — DeepSeek 大模型逐字创作，每条脚本都不重复。注册即送 <strong>600 积分</strong>，每次生成消耗 <strong>2 积分</strong>。</p></section>
+  <section class="hero"><div class="hero-badge">🚀 DEEPSEEK AI 驱动</div><h1>从<span>一句话</span>到<span>爆款脚本</span><br>AI实时创作，每次独一无二</h1><p>选人设、填细节、点生成。注册即送 <strong>600 积分</strong>，每次 <strong>2 积分</strong>。</p></section>
   <div class="container c1-grid">
-    <div class="c1-card c1-card-1"><div class="c1-visual"><div class="c1-typing-box"><div class="c1-line"></div><div class="c1-line"></div><div class="c1-line"></div><div class="c1-line"></div><div class="c1-cursor-blink"></div></div></div><div class="c1-sub">DeepSeek AI · 实时创作</div><h3>智能文案生成</h3></div>
-    <div class="c1-card c1-card-2"><div class="c1-visual"><div class="c1-platform-cards"><div class="c1-pf-card"><div class="c1-pf-badge">🎵 抖音版</div><div class="c1-pf-text">快节奏 · <b>钩子前置</b><br>口语化 · 强情绪</div></div><div class="c1-pf-card"><div class="c1-pf-badge">📕 小红书版</div><div class="c1-pf-text">图文感 · <b>精致排版</b><br>种草向 · 真实感</div></div><div class="c1-pf-card"><div class="c1-pf-badge">▶️ 视频号版</div><div class="c1-pf-text">娓娓道来 · <b>深度叙事</b><br>信任感 · 娓婉转</div></div></div></div><div class="c1-sub">一套内容 · 多平台风格</div><h3>跨平台文案适配</h3></div>
-    <div class="c1-card c1-card-3"><div class="c1-visual"><div class="c1-shelf"><div class="c1-doc"><div class="c1-doc-line"></div><div class="c1-doc-line"></div></div><div class="c1-doc"><div class="c1-doc-line"></div><div class="c1-doc-line"></div><div class="c1-doc-line"></div></div><div class="c1-doc"><div class="c1-doc-line"></div><div class="c1-doc-line"></div></div></div><div class="c1-search-badge">🔍 搜索历史文案</div></div><div class="c1-sub">云端存储 · 随时复用</div><h3>个人文案库</h3></div>
+    <div class="c1-card c1-card-1"><div class="c1-visual"><div class="c1-typing-box"><div class="c1-line"></div><div class="c1-line"></div><div class="c1-line"></div><div class="c1-line"></div><div class="c1-cursor-blink"></div></div></div><div class="c1-sub">DEEPSEEK AI 实时创作</div><h3>智能文案生成</h3></div>
+    <div class="c1-card c1-card-2"><div class="c1-visual"><div class="c1-platform-cards"><div class="c1-pf-card"><div class="c1-pf-badge">🎵 抖音版</div><div class="c1-pf-text">快节奏·<b>钩子前置</b><br>口语化·强情绪</div></div><div class="c1-pf-card"><div class="c1-pf-badge">📕 小红书版</div><div class="c1-pf-text">图文感·<b>精致排版</b><br>种草向·真实感</div></div><div class="c1-pf-card"><div class="c1-pf-badge">▶️ 视频号版</div><div class="c1-pf-text">娓娓道来·<b>深度叙事</b><br>信任感·暖心</div></div></div></div><div class="c1-sub">一套内容·多平台风格</div><h3>跨平台文案适配</h3></div>
+    <div class="c1-card c1-card-3"><div class="c1-visual"><div class="c1-shelf"><div class="c1-doc"><div class="c1-doc-line"></div><div class="c1-doc-line"></div></div><div class="c1-doc"><div class="c1-doc-line"></div><div class="c1-doc-line"></div><div class="c1-doc-line"></div></div><div class="c1-doc"><div class="c1-doc-line"></div><div class="c1-doc-line"></div></div></div><div class="c1-search-badge">🔍 搜索历史文案</div></div><div class="c1-sub">云端存储·随时复用</div><h3>个人文案库</h3></div>
   </div>
 
   <section id="generator" class="container section-generator">
-    <div class="section-title"><h2>🎬 AI 智能生成口播脚本</h2><p>填得越具体，AI 写得越有灵魂</p></div>
-    <div id="pointsWarning" class="alert alert-warn" style="display:none">⚠️ 积分不足！剩余 <strong id="pointsWarningNum">0</strong> 积分，每次消耗 2 积分</div>
-    <div id="apiWarning" class="alert alert-warn" style="display:none">⚠️ 管理员尚未配置 AI 引擎，生成功能暂不可用</div>
+    <div class="section-title"><h2>🎬 AI智能生成口播脚本</h2><p>填入信息，AI实时创作</p></div>
+    <div id="apiWarning" class="alert alert-warn" style="display:none">⚠️ 管理员未配置AI引擎</div>
+    <div id="pointsWarning" class="alert alert-warn" style="display:none">⚠️ 积分不足！剩余 <strong id="pointsWarningNum">0</strong> 积分</div>
     <div class="form-panel"><div class="form-grid">
-      <div class="form-group"><label>🍽️ 商家类型</label><select id="bizType"><option value="">请选择...</option><option value="川菜馆">川菜馆</option><option value="火锅店">火锅店</option><option value="烧烤店">烧烤店</option><option value="面馆">面馆/粉店</option><option value="小吃店">小吃/炸串/卤味</option><option value="奶茶店">奶茶/饮品</option><option value="烘焙店">烘焙/甜品</option><option value="西餐厅">西餐/轻食</option><option value="日料店">日料/居酒屋</option><option value="大排档">大排档/宵夜</option><option value="custom">其他（自填）</option></select><input type="text" id="bizTypeCustom" placeholder="输入商家类型" style="display:none;margin-top:4px;"></div>
-      <div class="form-group"><label>📍 城市</label><input type="text" id="city" placeholder="如：成都锦江区"></div>
-      <div class="form-group full"><label>🎭 人设（必选）</label><div class="persona-cards"><div class="persona-card" data-persona="regret"><span class="icon">😅</span>后悔型</div><div class="persona-card" data-persona="gang"><span class="icon">😤</span>杠精型</div><div class="persona-card" data-persona="honest"><span class="icon">🤝</span>实在型</div><div class="persona-card" data-persona="craft"><span class="icon">🔪</span>匠心型</div></div><input type="hidden" id="persona" value=""></div>
-      <div class="form-group"><label>📹 内容类型</label><select id="contentType"><option value="founder">置顶/创始人故事</option><option value="story" selected>小经历分享</option><option value="opinion">说观点类</option><option value="pain">痛点极致化</option><option value="process">晒过程/晒案例</option><option value="knowledge">教知识类</option><option value="product">说产品/带货</option></select></div>
-      <div class="form-group"><label>⏱️ 时长</label><select id="duration"><option value="50">50秒</option><option value="60" selected>60秒</option><option value="70">70秒</option><option value="90">90秒</option><option value="120">120秒</option></select></div>
-      <div class="form-group full"><label>💡 特殊细节</label><textarea id="extraDetails" placeholder="比如：开了三年、招牌是水煮鱼、老顾客叫他老王..."></textarea></div>
-      <div class="form-group full"><label>🎯 核心信息（可选）</label><textarea id="coreMessage" placeholder="一句话说清你最想让顾客记住的事"></textarea></div>
-      <div class="form-group full"><label>🏷️ 标签（逗号分隔）</label><input type="text" id="tags" placeholder="如：川菜,减脂,新店开业"></div>
+      <div class="form-group"><label>商家类型</label><select id="bizType"><option value="">请选择</option><option value="川菜馆">川菜馆</option><option value="火锅店">火锅店</option><option value="烧烤店">烧烤店</option><option value="面馆">面馆/粉店</option><option value="小吃店">小吃/炸串/卤味</option><option value="奶茶店">奶茶/饮品</option><option value="烘焙店">烘焙/甜品</option><option value="西餐厅">西餐/轻食</option><option value="日料店">日料/居酒屋</option><option value="大排档">大排档/宵夜</option><option value="custom">其他</option></select></div>
+      <div class="form-group"><label>城市</label><input type="text" id="city" placeholder="如：成都锦江区"></div>
+      <div class="form-group full"><label>人设（必选）</label><div class="persona-cards"><div class="persona-card" data-persona="regret"><span class="icon">😅</span>后悔型</div><div class="persona-card" data-persona="gang"><span class="icon">😤</span>杠精型</div><div class="persona-card" data-persona="honest"><span class="icon">🤝</span>实在型</div><div class="persona-card" data-persona="craft"><span class="icon">🔪</span>匠心型</div></div><input type="hidden" id="persona" value=""></div>
+      <div class="form-group"><label>内容类型</label><select id="contentType"><option value="founder">创始人故事</option><option value="story" selected>小经历分享</option><option value="opinion">说观点类</option><option value="pain">痛点极致化</option><option value="process">晒过程</option><option value="knowledge">教知识类</option><option value="product">说产品/带货</option></select></div>
+      <div class="form-group"><label>时长</label><select id="duration"><option value="50">50秒</option><option value="60" selected>60秒</option><option value="70">70秒</option><option value="90">90秒</option><option value="120">120秒</option></select></div>
+      <div class="form-group full"><label>特殊细节</label><textarea id="extraDetails" placeholder="比如：开了三年、招牌水煮鱼、老顾客叫老王..."></textarea></div>
+      <div class="form-group full"><label>核心信息</label><textarea id="coreMessage" placeholder="你最想让顾客记住的一件事"></textarea></div>
+      <div class="form-group full"><label>标签</label><input type="text" id="tags" placeholder="如：川菜,减脂"></div>
     </div>
-    <div class="btn-row">
-      <button class="btn-generate" id="btnGenerate" onclick="generateScript()"><span class="spinner" id="spinner"></span>✨ AI 生成口播脚本</button>
-      <button class="btn-secondary" onclick="batchGenerate()">⚡ 批量生成 3 版</button>
-    </div></div>
-    <div class="result-panel" id="resultPanel">
-      <div class="result-header"><span class="result-badge">✅ AI 已生成</span><div class="result-actions"><button class="btn-action" onclick="toggleEdit()">✏️ <span id="editBtnText">编辑</span></button><button class="btn-action save" onclick="saveToLibrary()">💾 保存到云端</button><button class="btn-action" onclick="copyScript()">📋 复制</button><button class="btn-action" onclick="downloadScript()">⬇ 下载</button><button class="btn-action" onclick="regenerateScript()">🔄 换一版</button></div></div>
-      <div class="script-card"><div class="script-title" id="scriptMeta"></div><div class="script-content" id="scriptContent"></div><div class="broll-section" id="brollSection"></div><div class="script-analysis" id="scriptAnalysis"></div></div>
-    </div>
-    <div class="batch-panel" id="batchPanel" style="display:none"><h3>📦 AI 批量生成（3 个版本 — 选择满意的保存）</h3><div class="batch-grid" id="batchGrid"></div></div>
+    <div class="btn-row"><button class="btn-generate" id="btnGenerate" onclick="generateScript()"><span class="spinner" id="spinner"></span>✨ AI生成脚本</button><button class="btn-secondary" onclick="batchGenerate()">⚡ 批量3版</button></div></div>
+    <div class="result-panel" id="resultPanel"><div class="result-header"><span class="result-badge">✅ AI已生成</span><div class="result-actions"><button class="btn-action" onclick="toggleEdit()">✏️ <span id="editBtnText">编辑</span></button><button class="btn-action save" onclick="saveToLibrary()">💾 保存云端</button><button class="btn-action" onclick="copyScript()">📋 复制</button><button class="btn-action" onclick="downloadScript()">⬇ 下载</button><button class="btn-action" onclick="regenerateScript()">🔄 换一版</button></div></div><div class="script-card"><div class="script-title" id="scriptMeta"></div><div class="script-content" id="scriptContent"></div><div class="broll-section" id="brollSection"></div><div class="script-analysis" id="scriptAnalysis"></div></div></div>
+    <div class="batch-panel" id="batchPanel" style="display:none"><h3>📦 AI批量生成</h3><div class="batch-grid" id="batchGrid"></div></div>
   </section>
 </div>
 
-<div class="page" id="page-library">
-  <div class="container" style="padding-top:40px"><div class="section-title"><h2>📚 我的云端文案库</h2><p id="libraryLoginHint">登录后可查看所有保存的脚本</p></div>
-  <div class="library-filters"><select id="filterPersona" onchange="renderLibrary()"><option value="all">全部人设</option><option value="regret">后悔型</option><option value="gang">杠精型</option><option value="honest">实在型</option><option value="craft">匠心型</option></select><select id="filterBiz" onchange="renderLibrary()"><option value="all">全部商家</option></select><input type="text" id="filterSearch" placeholder="🔍 搜索..." oninput="renderLibrary()"></div>
-  <div class="library-grid" id="libraryGrid"></div><div class="empty-state" id="libraryEmpty"><div class="icon">📭</div><p>还没有保存过文案</p></div>
-</div></div>
+<div class="page" id="page-library"><div class="container" style="padding-top:40px"><div class="section-title"><h2>📚 云端文案库</h2></div><div class="library-filters"><select id="filterPersona" onchange="renderLibrary()"><option value="all">全部</option><option value="regret">后悔型</option><option value="gang">杠精型</option><option value="honest">实在型</option><option value="craft">匠心型</option></select><select id="filterBiz" onchange="renderLibrary()"><option value="all">全部商家</option></select><input type="text" id="filterSearch" placeholder="🔍 搜索" oninput="renderLibrary()"></div><div class="library-grid" id="libraryGrid"></div><div class="empty-state" id="libraryEmpty"><div class="icon">📭</div><p>还没有保存文案</p></div></div></div>
 
-<div class="page" id="page-templates">
-  <div class="container" style="padding-top:40px"><div class="section-title"><h2>📋 爆款模板库</h2><p>点击加载模板，AI 会基于模板风格生成</p></div><div class="template-grid" id="templateGrid"></div></div>
+<div class="page" id="page-templates"><div class="container" style="padding-top:40px"><div class="section-title"><h2>📋 模板库</h2></div><div class="template-grid" id="templateGrid"></div></div></div>
+<div class="page" id="page-stats"><div class="container" style="padding-top:40px"><div class="section-title"><h2>📊 统计</h2></div><div class="stats-row" id="statsRow"></div></div></div>
+
+<div class="page" id="page-admin"><div class="container" style="padding-top:40px"><div class="section-title"><h2>🔑 管理员</h2></div>
+<div class="form-panel" style="max-width:600px;margin:0 auto 24px"><h3>🤖 DEEPSEEK API KEY（必填）</h3><div class="form-group"><label>API Key</label><input type="password" id="apiKeyInput" placeholder="sk-..."></div><p style="font-size:.7rem;color:var(--text2);margin:4px 0">platform.deepseek.com → API Keys → 创建</p><div class="btn-row"><button class="btn-generate" onclick="saveApiKey()">💾 保存</button></div></div>
+<div class="form-panel" style="max-width:600px;margin:0 auto 24px"><h3>生成邀请码</h3><div class="form-grid"><div class="form-group"><label>数量</label><select id="inviteCount"><option value="5" selected>5个</option><option value="10">10个</option><option value="20">20个</option></select></div><div class="form-group"><label>积分</label><input type="number" id="invitePoints" value="600"></div></div><div class="btn-row"><button class="btn-generate" onclick="generateInviteCodes()">🎫 生成</button></div></div>
+<div class="form-panel" style="max-width:600px;margin:0 auto 24px"><h3>充值积分</h3><div class="form-grid"><div class="form-group"><label>用户名</label><input type="text" id="rechargeUser"></div><div class="form-group"><label>积分</label><input type="number" id="rechargePoints" value="100"></div></div><div class="btn-row"><button class="btn-generate" onclick="rechargeUserPoints()">💰 充值</button></div></div>
+<div class="form-panel" style="max-width:600px;margin:0 auto"><h3>邀请码列表</h3><div id="inviteCodeList">加载中...</div></div></div>
 </div>
 
-<div class="page" id="page-stats">
-  <div class="container" style="padding-top:40px"><div class="section-title"><h2>📊 生成统计</h2></div><div class="stats-row" id="statsRow"></div></div>
-</div>
+<div class="modal-overlay" id="authModal"><div class="modal"><h2 id="authModalTitle">登录</h2><div class="form-group"><label>用户名</label><input type="text" id="authUsername"></div><div class="form-group"><label>密码</label><input type="password" id="authPassword"></div><div class="form-group" id="confirmPwGroup" style="display:none"><label>确认密码</label><input type="password" id="authConfirmPw"></div><div class="form-group" id="inviteCodeGroup" style="display:none"><label>邀请码</label><input type="text" id="authInviteCode"></div><div class="btn-row"><button class="btn-generate" onclick="doAuth()">登录</button></div><div class="modal-switch"><a onclick="toggleAuthMode()" id="authSwitchText">去注册</a></div><div class="modal-switch"><a onclick="closeAuth()" style="color:var(--text3)">取消</a></div></div></div>
 
-<div class="page" id="page-profile">
-  <div class="container" style="padding-top:40px"><div class="section-title"><h2>👤 个人设置</h2></div>
-  <div class="form-panel" style="max-width:500px;margin:0 auto">
-    <div class="form-group"><label>用户名</label><input type="text" id="profileName" disabled></div>
-    <div class="form-group"><label>注册时间</label><input type="text" id="profileDate" disabled></div>
-    <div class="form-group"><label>剩余积分</label><input type="text" id="profilePoints" disabled></div>
-    <div class="form-group"><label>已保存文案数</label><input type="text" id="profileCount" disabled></div>
-    <div class="btn-row"><button class="btn-secondary" onclick="exportAllData()" style="flex:1">📦 导出数据</button><button class="btn-action danger" onclick="clearAllData()" style="flex:1">🗑️ 清除</button></div>
-  </div>
-</div></div>
-
-<div class="page" id="page-admin">
-  <div class="container" style="padding-top:40px"><div class="section-title"><h2>🔑 管理员面板</h2></div>
-    <div class="form-panel" style="max-width:600px;margin:0 auto 24px">
-      <h3 style="font-size:1rem;margin-bottom:14px">🤖 DeepSeek API 配置（必填）</h3>
-      <div class="form-group"><label>DeepSeek API Key</label><input type="password" id="apiKeyInput" placeholder="sk-..."></div>
-      <p style="font-size:.7rem;color:var(--text2);margin-top:4px">去 <b>platform.deepseek.com</b> 注册，在 API Keys 页面创建。余额充 10 块钱够用很久。</p>
-      <div class="btn-row"><button class="btn-generate" onclick="saveApiKey()">💾 保存 API Key</button></div>
-    </div>
-    <div class="form-panel" style="max-width:600px;margin:0 auto 24px"><h3 style="font-size:1rem;margin-bottom:14px">生成邀请码</h3><div class="form-grid"><div class="form-group"><label>数量</label><select id="inviteCount"><option value="1">1 个</option><option value="5" selected>5 个</option><option value="10">10 个</option><option value="20">20 个</option></select></div><div class="form-group"><label>赠送积分</label><input type="number" id="invitePoints" value="600" min="100"></div></div><div class="btn-row"><button class="btn-generate" onclick="generateInviteCodes()">🎫 生成邀请码</button></div></div>
-    <div class="form-panel" style="max-width:600px;margin:0 auto 24px"><h3 style="font-size:1rem;margin-bottom:14px">给用户充值积分</h3><div class="form-grid"><div class="form-group"><label>用户名</label><input type="text" id="rechargeUser"></div><div class="form-group"><label>积分数量</label><input type="number" id="rechargePoints" value="100" min="10"></div></div><div class="btn-row"><button class="btn-generate" onclick="rechargeUserPoints()">💰 充值</button></div></div>
-    <div class="form-panel" style="max-width:600px;margin:0 auto"><h3 style="font-size:1rem;margin-bottom:14px">邀请码列表</h3><div id="inviteCodeList" style="font-size:.78rem;max-height:300px;overflow-y:auto">加载中...</div></div>
-  </div>
-</div>
-
-<div class="modal-overlay" id="authModal"><div class="modal">
-  <h2 id="authModalTitle">登录</h2>
-  <div class="form-group"><label>用户名</label><input type="text" id="authUsername"></div>
-  <div class="form-group"><label>密码</label><input type="password" id="authPassword"></div>
-  <div class="form-group" id="confirmPwGroup" style="display:none"><label>确认密码</label><input type="password" id="authConfirmPw"></div>
-  <div class="form-group" id="inviteCodeGroup" style="display:none"><label>🔑 邀请码（必填）</label><input type="text" id="authInviteCode"></div>
-  <div class="btn-row"><button class="btn-generate" onclick="doAuth()" id="authSubmitBtn">登录</button></div>
-  <div class="modal-switch" id="authSwitch">还没有账号？<a onclick="toggleAuthMode()">去注册</a></div>
-  <div class="modal-switch"><a onclick="closeAuth()" style="color:var(--text3)">取消</a></div>
-</div></div>
-
-<div class="modal-overlay" id="adminModal"><div class="modal">
-  <h2 id="adminModalTitle">🔐 管理员登录</h2>
-  <div class="form-group"><label>管理员用户名</label><input type="text" id="adminUsername"></div>
-  <div class="form-group"><label>管理员密码</label><input type="password" id="adminPassword" onkeydown="if(event.key==='Enter')doAdminAuth()"></div>
-  <div class="form-group" id="adminSetupMode" style="display:none"><label>确认密码</label><input type="password" id="adminConfirmPw" onkeydown="if(event.key==='Enter')doAdminAuth()"></div>
-  <div class="btn-row"><button class="btn-generate" onclick="doAdminAuth()">登录</button></div>
-  <div class="modal-switch"><a onclick="$('adminModal').classList.remove('active')" style="color:var(--text3);cursor:pointer">取消</a></div>
-</div></div>
-
+<div class="modal-overlay" id="adminModal"><div class="modal"><h2 id="adminModalTitle">管理员登录</h2><div class="form-group"><label>用户名</label><input type="text" id="adminUsername"></div><div class="form-group"><label>密码</label><input type="password" id="adminPassword"></div><div class="form-group" id="adminSetupMode" style="display:none"><label>确认密码</label><input type="password" id="adminConfirmPw"></div><div class="btn-row"><button class="btn-generate" onclick="doAdminAuth()">登录</button></div><div class="modal-switch"><a onclick="$('adminModal').classList.remove('active')" style="color:var(--text3);cursor:pointer">取消</a></div></div></div>
 <div class="toast" id="toast"></div>
 
 <script>
 const SB_URL='https://ahqqyjyshghrwxivmdji.supabase.co';
 const SB_KEY='sb_publishable_GDSciFYC9JotNpoQQ_QS7A_kPSniJoc';
 const sb=window.supabase.createClient(SB_URL,SB_KEY);
-const POINTS_PER_GEN=2, DEFAULT_POINTS=600;
-let currentUser=null, authMode='login', currentScript=null, isEditing=false, savedScripts=[], batchResults=[], isAdmin=false, apiKey='';
+const POINTS_PER_GEN=2,DEFAULT_POINTS=600;
+let currentUser=null,authMode='login',currentScript=null,isEditing=false,savedScripts=[],batchResults=[],isAdmin=false,apiKey='';
 
 const PERSONAS={regret:{name:'后悔型',icon:'😅',desc:'先抛"我后悔了"制造悬念→用细节展开辛酸→反转成凡尔赛→低调收尾。语气：有点累、有点倔、有点骄傲、有点幽默。句子要碎、有停顿、像跟邻居聊天。'},gang:{name:'杠精型',icon:'😤',desc:'正面硬刚质疑者→用供应链和手艺细节怼回去→霸气但不骂人。语气：平静的自信，用实力说话。'},honest:{name:'实在型',icon:'🤝',desc:'把顾客挑的毛病公开→纠结要不要改→试了发现不行→宣布不改→但给台阶。语气：接地气、犹豫过但坚定了。'},craft:{name:'匠心型',icon:'🔪',desc:'用一条不可触碰的品质红线开场→展示每日流程→讲付出的代价→灵魂总结。语气：沉稳、不张扬但有底气。'}};
 const CT={founder:'创始人故事',story:'小经历分享',opinion:'说观点',pain:'痛点极致化',process:'晒过程',knowledge:'教知识',product:'说产品'};
 
 function $(id){return document.getElementById(id)}
 function pick(a){return a[Math.floor(Math.random()*a.length)]}
-function showToast(m,ms=2000){const t=$('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),ms)}
+function showToast(m){const t=$('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2000)}
 function getBizName(){const s=$('bizType').value;return s==='custom'?($('bizTypeCustom').value||'餐饮店'):(s||'餐饮店')}
 function getCity(){return $('city').value||'本地'}
 function getPersona(){return $('persona').value||'regret'}
@@ -304,218 +225,149 @@ function getExtra(){return $('extraDetails').value.trim()}
 function getCore(){return $('coreMessage').value.trim()}
 function getTags(){return $('tags').value.split(',').map(t=>t.trim()).filter(Boolean)}
 
-/* ═════════ API KEY ═════════ */
 function getApiKey(){if(!apiKey)apiKey=localStorage.getItem('hbs_ds_key')||'';return apiKey}
-function saveApiKey(){const k=$('apiKeyInput').value.trim();if(!k||!k.startsWith('sk-')){showToast('请输入有效的 DeepSeek API Key（以 sk- 开头）');return}localStorage.setItem('hbs_ds_key',k);apiKey=k;updateApiBadge();$('apiKeyInput').value='';showToast('✅ API Key 已保存')}
-function updateApiBadge(){const k=getApiKey();const b=$('apiBadge');b.textContent=k?'🤖 AI就绪':'🤖 未配置';b.className='api-badge '+(k?'on':'off')}
+function saveApiKey(){const k=$('apiKeyInput').value.trim();if(!k||!k.startsWith('sk-')){showToast('请输入有效的DEEPSEEK API Key（sk-开头）');return}localStorage.setItem('hbs_ds_key',k);apiKey=k;updateApiBadge();$('apiKeyInput').value='';showToast('API Key已保存')}
+function updateApiBadge(){const k=getApiKey();$('apiBadge').textContent=k?'🤖 AI就绪':'🤖 未配置';$('apiBadge').className='api-badge '+(k?'on':'off')}
 
-/* ═════════ SUPABASE OPS ═════════ */
-async function dbGetUser(uname){const{data}=await sb.from('user_points').select('*').eq('username',uname).maybeSingle();return data}
-async function dbGetPoints(uname){const{data}=await sb.from('user_points').select('points').eq('username',uname).maybeSingle();if(!data){await sb.from('user_points').insert({username:uname,points:DEFAULT_POINTS,password:''});return DEFAULT_POINTS}return data.points}
-async function dbSetPoints(uname,pts){await sb.from('user_points').upsert({username:uname,points:pts,updated_at:new Date().toISOString()})}
-async function dbGetInviteCodes(){const{data}=await sb.from('invite_codes').select('*').order('created_at',{ascending:false});return data||[]}
-async function dbSaveInviteCode(c){await sb.from('invite_codes').insert(c)}
-async function dbUseInviteCode(code){const{data}=await sb.from('invite_codes').select('*').eq('code',code).eq('used',false).maybeSingle();if(!data)return null;await sb.from('invite_codes').update({used:true,used_by:currentUser?currentUser.username:'unknown',used_at:new Date().toISOString()}).eq('code',code);return data}
+async function dbGetUser(u){const{data}=await sb.from('user_points').select('*').eq('username',u).maybeSingle();return data}
+async function dbGetPoints(u){const{data}=await sb.from('user_points').select('points').eq('username',u).maybeSingle();return data?data.points:DEFAULT_POINTS}
+async function dbSetPoints(u,pts){await sb.from('user_points').upsert({username:u,points:pts,updated_at:new Date().toISOString()})}
+async function dbInviteCodes(){const{data}=await sb.from('invite_codes').select('*').order('created_at',{ascending:false});return data||[]}
+async function dbUseCode(code){const{data}=await sb.from('invite_codes').select('*').eq('code',code).eq('used',false).maybeSingle();if(!data)return null;await sb.from('invite_codes').update({used:true,used_by:currentUser?currentUser.username:'?',used_at:new Date().toISOString()}).eq('code',code);return data}
 async function dbSaveScript(e){await sb.from('scripts').upsert({id:e.id,username:currentUser.username,script_data:e,created_at:e.createdAt})}
 async function dbLoadScripts(){const{data}=await sb.from('scripts').select('*').eq('username',currentUser.username).order('created_at',{ascending:false});return(data||[]).map(r=>r.script_data)}
 async function dbDeleteScript(id){await sb.from('scripts').delete().eq('id',id)}
 
-/* ═════════ POINTS ═════════ */
 async function getUserPoints(){if(!currentUser)return Infinity;return await dbGetPoints(currentUser.username)}
-async function setUserPoints(pts){if(!currentUser)return;await dbSetPoints(currentUser.username,pts)}
-async function deductPoints(){if(!currentUser)return true;const pts=await getUserPoints();if(pts<POINTS_PER_GEN){showToast('积分不足！剩余'+pts+'积分');return false}await setUserPoints(pts-POINTS_PER_GEN);updatePointsUI();return true}
+async function deductPoints(){if(!currentUser)return true;const pts=await getUserPoints();if(pts<POINTS_PER_GEN){showToast('积分不足');return false}await dbSetPoints(currentUser.username,pts-POINTS_PER_GEN);updatePointsUI();return true}
 async function updatePointsUI(){
-  if(!currentUser){$('pointsDisplay').style.display='none';$('pointsWarning').style.display='none';$('btnGenerate').disabled=true;$('btnGenerate').innerHTML='🔒 请先登录';return}
+  if(!currentUser){$('pointsDisplay').style.display='none';$('btnGenerate').disabled=true;$('btnGenerate').innerHTML='🔒 请先登录';return}
   const pts=await getUserPoints();$('pointsDisplay').style.display='inline';$('pointsDisplay').textContent='⭐ '+pts;
-  if(pts<POINTS_PER_GEN){$('pointsWarning').style.display='block';$('pointsWarningNum').textContent=pts;$('btnGenerate').disabled=true}else{$('pointsWarning').style.display='none';$('btnGenerate').disabled=false;$('btnGenerate').innerHTML='<span class="spinner" id="spinner"></span>✨ AI 生成口播脚本'}
+  $('btnGenerate').disabled=pts<POINTS_PER_GEN;$('pointsWarning').style.display=pts<POINTS_PER_GEN?'block':'none';
+  if(pts>=POINTS_PER_GEN)$('btnGenerate').innerHTML='<span class="spinner" id="spinner"></span>✨ AI生成脚本'
 }
 
-/* ═════════ INVITE CODES ═════════ */
-async function generateInviteCodes(){const count=parseInt($('inviteCount').value)||5,pts=parseInt($('invitePoints').value)||600;for(let i=0;i<count;i++){const code='HBS-'+Date.now().toString(36).toUpperCase()+'-'+Math.random().toString(36).substr(2,5).toUpperCase();await dbSaveInviteCode({code,points:pts,used:false,created_at:new Date().toISOString()})}renderInviteCodeList();showToast('✅ 已生成 '+count+' 个邀请码')}
-async function renderInviteCodeList(){const codes=await dbGetInviteCodes(),unused=codes.filter(c=>!c.used),used=codes.filter(c=>c.used);$('inviteCodeList').innerHTML='<p style="margin-bottom:10px;color:var(--green);font-weight:600">未使用 ('+unused.length+')</p>'+unused.slice(-30).map(c=>`<div style="margin-bottom:6px;padding:6px;background:var(--green-bg);border-radius:6px"><code style="font-weight:700">${c.code}</code> <span style="color:var(--text2);font-size:0.7rem">${c.points}积分</span></div>`).join('')+'<p style="margin:14px 0 6px;color:var(--text3)">已使用 ('+used.length+')</p>'+used.slice(-10).map(c=>`<div style="margin-bottom:4px;color:var(--text3);font-size:0.7rem"><s>${c.code}</s> → ${c.used_by||'?'}</div>`).join('');}
-async function rechargeUserPoints(){const u=$('rechargeUser').value.trim(),pts=parseInt($('rechargePoints').value)||0;if(!u||pts<=0){showToast('请输入有效用户名和积分');return}const cur=await dbGetPoints(u);await dbSetPoints(u,cur+pts);showToast('✅ 已为 '+u+' 充值 '+pts+' 积分（当前：'+(cur+pts)+'）')}
+async function generateInviteCodes(){const n=parseInt($('inviteCount').value)||5,p=parseInt($('invitePoints').value)||600;for(let i=0;i<n;i++){const c='HBS-'+Date.now().toString(36).toUpperCase()+'-'+Math.random().toString(36).substr(2,5).toUpperCase();await sb.from('invite_codes').insert({code:c,points:p,used:false,created_at:new Date().toISOString()})}renderInviteCodeList();showToast('已生成 '+n+' 个码')}
+async function renderInviteCodeList(){const c=await dbInviteCodes(),u=c.filter(x=>!x.used),s=c.filter(x=>x.used);$('inviteCodeList').innerHTML='<p style="color:var(--green);font-weight:600">未使用 ('+u.length+')</p>'+u.slice(-30).map(x=>`<div style="margin:4px 0;padding:4px;background:var(--green-bg);border-radius:4px"><code>${x.code}</code> ${x.points}积分</div>`).join('')+'<p style="margin-top:10px;color:var(--text3)">已使用 ('+s.length+')</p>'}
+async function rechargeUserPoints(){const u=$('rechargeUser').value.trim(),p=parseInt($('rechargePoints').value);if(!u||!p)return;const c=await dbGetPoints(u);await dbSetPoints(u,c+p);showToast(u+' +'+p+'积分')}
 
-/* ═════════ AUTH ═════════ */
-function handleAuthBtn(){if(currentUser){logout()}else{$('authModal').classList.add('active');$('authUsername').focus()}}
-function logout(){currentUser=null;updateAuthUI();showToast('已退出');localStorage.removeItem('hbs_last_user')}
+function handleAuthBtn(){if(currentUser){logout()}else{$('authModal').classList.add('active')}}
+function logout(){currentUser=null;updateAuthUI();localStorage.removeItem('hbs_last_user')}
 function closeAuth(){$('authModal').classList.remove('active')}
-function toggleAuthMode(){authMode=authMode==='login'?'register':'login';$('authModalTitle').textContent=authMode==='login'?'登录':'注册';$('authSubmitBtn').textContent=authMode==='login'?'登录':'注册';$('confirmPwGroup').style.display=authMode==='login'?'none':'block';$('inviteCodeGroup').style.display=authMode==='login'?'none':'block';$('authSwitch').innerHTML=authMode==='login'?'还没有账号？<a onclick="toggleAuthMode()">去注册</a>':'已有账号？<a onclick="toggleAuthMode()">去登录</a>'}
-async function doAuth(){const u=$('authUsername').value.trim(),p=$('authPassword').value.trim();if(!u||!p){showToast('请填写用户名和密码');return}
-  if(authMode==='register'){const cp=$('authConfirmPw').value.trim(),ic=$('authInviteCode').value.trim();if(p!==cp){showToast('两次密码不一致');return}if(!ic){showToast('请输入邀请码');return}const exist=await dbGetUser(u);if(exist&&exist.password){showToast('用户名已存在');return}const invite=await dbUseInviteCode(ic);if(!invite){showToast('邀请码无效或已被使用');return}const pts=invite.points||DEFAULT_POINTS;await sb.from('user_points').upsert({username:u,password:p,points:pts,created_at:new Date().toISOString(),updated_at:new Date().toISOString()});showToast('注册成功！获得 '+pts+' 积分');toggleAuthMode();return}
-  const d=await dbGetUser(u);if(!d||d.password!==p){showToast('用户名或密码错误');return}currentUser={username:u,createdAt:d.created_at};localStorage.setItem('hbs_last_user',u);await updateAuthUI();closeAuth();await renderLibrary();showToast('欢迎回来，'+u+'！剩余 '+(await getUserPoints())+' 积分')}
-async function updateAuthUI(){if(currentUser){$('usernameDisplay').textContent=currentUser.username;$('authBtn').textContent='退出';$('libraryLoginHint').textContent=''}else{$('usernameDisplay').textContent='未登录';$('authBtn').textContent='登录';$('libraryLoginHint').textContent='登录后可保存和管理文案'}await updatePointsUI()}
+function toggleAuthMode(){authMode=authMode==='login'?'register':'login';$('authModalTitle').textContent=authMode==='login'?'登录':'注册';$('confirmPwGroup').style.display=authMode==='login'?'none':'block';$('inviteCodeGroup').style.display=authMode==='login'?'none':'block';$('authSwitchText').textContent=authMode==='login'?'去注册':'去登录'}
+async function doAuth(){const u=$('authUsername').value.trim(),p=$('authPassword').value.trim();if(!u||!p)return;
+  if(authMode==='register'){const cp=$('authConfirmPw').value.trim(),ic=$('authInviteCode').value.trim();if(p!==cp){showToast('密码不一致');return}if(!ic){showToast('需要邀请码');return}const ex=await dbGetUser(u);if(ex&&ex.password){showToast('用户名已存在');return}const inv=await dbUseCode(ic);if(!inv){showToast('邀请码无效');return}await sb.from('user_points').upsert({username:u,password:p,points:inv.points||600,created_at:new Date().toISOString(),updated_at:new Date().toISOString()});showToast('注册成功！');toggleAuthMode();return}
+  const d=await dbGetUser(u);if(!d||d.password!==p){showToast('用户名或密码错误');return}currentUser={username:u,createdAt:d.created_at};localStorage.setItem('hbs_last_user',u);await updateAuthUI();closeAuth();await renderLibrary()}
+async function updateAuthUI(){if(currentUser){$('usernameDisplay').textContent=currentUser.username;$('authBtn').textContent='退出'}else{$('usernameDisplay').textContent='未登录';$('authBtn').textContent='登录'}await updatePointsUI()}
 
-/* ═════════ ADMIN ═════════ */
-async function checkAdminAuth(){if(isAdmin)return true;const creds=JSON.parse(localStorage.getItem('hbs_admin_creds')||'null');if(!creds){const{data}=await sb.from('admin_users').select('*').limit(1).maybeSingle();if(data){localStorage.setItem('hbs_admin_creds',JSON.stringify({username:data.username,password:data.password}));$('adminModalTitle').textContent='🔐 管理员登录';$('adminSetupMode').style.display='none';$('adminModal').classList.add('active');return false}$('adminModalTitle').textContent='🔑 首次设置管理员账号';$('adminSetupMode').style.display='block';$('adminModal').classList.add('active');return false}$('adminModalTitle').textContent='🔐 管理员登录';$('adminSetupMode').style.display='none';$('adminModal').classList.add('active');return false}
-async function doAdminAuth(){const u=$('adminUsername').value.trim(),p=$('adminPassword').value.trim();if(!u||!p){showToast('请填写用户名和密码');return}const creds=JSON.parse(localStorage.getItem('hbs_admin_creds')||'null');if(!creds){const{data}=await sb.from('admin_users').select('*').limit(1).maybeSingle();if(data){if(u===data.username&&p===data.password){localStorage.setItem('hbs_admin_creds',JSON.stringify({username:u,password:p}));isAdmin=true;$('adminModal').classList.remove('active');switchPage('admin');showToast('管理员登录成功');return}else{showToast('管理员用户名或密码错误');return}}const cp=$('adminConfirmPw').value.trim();if(p!==cp){showToast('两次密码不一致');return}localStorage.setItem('hbs_admin_creds',JSON.stringify({username:u,password:p}));await sb.from('admin_users').delete().neq('username','__none__');await sb.from('admin_users').insert({username:u,password:p,created_at:new Date().toISOString()});isAdmin=true;$('adminModal').classList.remove('active');switchPage('admin');showToast('管理员已创建！');return}if(u===creds.username&&p===creds.password){isAdmin=true;$('adminModal').classList.remove('active');switchPage('admin');showToast('管理员登录成功')}else{const{data}=await sb.from('admin_users').select('*').eq('username',u).eq('password',p).maybeSingle();if(data){localStorage.setItem('hbs_admin_creds',JSON.stringify({username:u,password:p}));isAdmin=true;$('adminModal').classList.remove('active');switchPage('admin');showToast('管理员登录成功（云端恢复）')}else showToast('管理员用户名或密码错误')}}
+async function checkAdminAuth(){if(isAdmin)return true;const c=JSON.parse(localStorage.getItem('hbs_admin_creds')||'null');if(!c){const{data}=await sb.from('admin_users').select('*').limit(1).maybeSingle();if(data)localStorage.setItem('hbs_admin_creds',JSON.stringify({username:data.username,password:data.password}));$('adminModalTitle').textContent=data?'管理员登录':'首次设置管理员';$('adminSetupMode').style.display=data?'none':'block';$('adminModal').classList.add('active');return false}$('adminModal').classList.add('active');return false}
+async function doAdminAuth(){const u=$('adminUsername').value.trim(),p=$('adminPassword').value.trim();if(!u||!p)return;const c=JSON.parse(localStorage.getItem('hbs_admin_creds')||'null');if(!c){const{data}=await sb.from('admin_users').select('*').limit(1).maybeSingle();if(data){if(u===data.username&&p===data.password){localStorage.setItem('hbs_admin_creds',JSON.stringify({username:u,password:p}));isAdmin=true;$('adminModal').classList.remove('active');switchPage('admin');return}showToast('密码错误');return}const cp=$('adminConfirmPw').value.trim();if(p!==cp){showToast('密码不一致');return}localStorage.setItem('hbs_admin_creds',JSON.stringify({username:u,password:p}));await sb.from('admin_users').delete().neq('username','__none__');await sb.from('admin_users').insert({username:u,password:p,created_at:new Date().toISOString()});isAdmin=true;$('adminModal').classList.remove('active');switchPage('admin');return}if(u===c.username&&p===c.password){isAdmin=true;$('adminModal').classList.remove('active');switchPage('admin')}else showToast('密码错误')}
 
-/* ═════════ PAGES ═════════ */
-async function switchPage(page){if(page==='admin'&&!isAdmin){$('adminUsername').value='';$('adminPassword').value='';await checkAdminAuth();if(!isAdmin)return}document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));$('page-'+page).classList.add('active');document.querySelectorAll('.nav-links a,.nav-links button').forEach(l=>l.classList.remove('active'));const link=document.querySelector('.nav-links a[href="#'+page+'"]')||document.querySelector('.nav-links button[onclick*="'+page+'"]');if(link)link.classList.add('active');if(page==='library')await renderLibrary();if(page==='stats')await renderStats();if(page==='profile')await renderProfile();if(page==='templates')renderTemplatesPage();if(page==='admin'){await renderInviteCodeList();$('apiKeyInput').value=getApiKey()}}
-function renderTemplatesPage(){$('templateGrid').innerHTML=[{p:'regret',t:'后悔型·凡尔赛之王',d:'先抛"我后悔了"制造悬念，再用真实细节反转成凡尔赛。',h:'"我最后悔的事，就是开了这家店"'},{p:'gang',t:'杠精型·正面硬刚',d:'直接挑战嫌贵的顾客，用供应链细节怼回去。',h:'"嫌贵就不要来吃"'},{p:'honest',t:'实在型·听劝人设',d:'把差评摆上台面，纠结要不要改——最终坚持自我。',h:'"你们天天说我家的太辣了……"'},{p:'craft',t:'匠心型·品质偏执',d:'用不可触碰的品质红线立人设。数字越具体越强。',h:'"超过四个小时，我自己都不吃"'}].map(c=>`<div class="library-card" onclick="loadTemplate('${c.p}')"><h3 style="font-size:.95rem;margin-bottom:6px">${PERSONAS[c.p].icon} ${c.t}</h3><p style="font-size:.78rem;color:var(--text2);margin-bottom:8px">${c.d}</p><span style="font-size:.75rem;color:var(--accent);font-weight:500;background:#FFF1F0;padding:4px 10px;border-radius:6px">🔥 ${c.h}</span></div>`).join('')}
-function loadTemplate(pk){$('persona').value=pk;document.querySelectorAll('.persona-card').forEach(c=>c.classList.remove('active'));const c=document.querySelector('.persona-card[data-persona="'+pk+'"]');if(c)c.classList.add('active');switchPage('generator');setTimeout(()=>$('generator').scrollIntoView({behavior:'smooth'}),100);showToast('已加载「'+PERSONAS[pk].name+'」模板')}
+async function switchPage(page){if(page==='admin'&&!isAdmin){await checkAdminAuth();if(!isAdmin)return}document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));$('page-'+page).classList.add('active');if(page==='library')await renderLibrary();if(page==='stats')await renderStats();if(page==='profile')await renderProfile();if(page==='templates')renderTemplatesPage();if(page==='admin'){await renderInviteCodeList();$('apiKeyInput').value=getApiKey()}}
+function renderTemplatesPage(){$('templateGrid').innerHTML=[{p:'regret',t:'后悔型',d:'先抛后悔制造悬念，再用细节反转成凡尔赛。'},{p:'gang',t:'杠精型',d:'正面硬刚，用供应链细节怼回去。'},{p:'honest',t:'实在型',d:'把差评公开，纠结后坚持自我。'},{p:'craft',t:'匠心型',d:'品质红线立人设，数字越具体越强。'}].map(x=>`<div class="library-card" onclick="loadTemplate('${x.p}')"><h3>${PERSONAS[x.p].icon} ${x.t}</h3><p style="font-size:.78rem;color:var(--text2)">${x.d}</p></div>`).join('')}
+function loadTemplate(pk){$('persona').value=pk;document.querySelectorAll('.persona-card').forEach(c=>c.classList.remove('active'));const c=document.querySelector('.persona-card[data-persona="'+pk+'"]');if(c)c.classList.add('active');switchPage('generator')}
 
-/* ═════════ AI SCRIPT ENGINE ═════════ */
-function buildSystemPrompt(pk, biz, city, ctLabel, dur, extra, core){
+/* ═══════ DEEPSEEK AI ═══════ */
+function buildPrompt(pk,biz,city,ctLabel,dur,extra,core){
   const p=PERSONAS[pk];
   return `你是中国顶级短视频口播脚本写手，专门为本地生活餐饮商家写爆款脚本。
 
-## 商家信息
-- 类型：${biz}，${city}
-- 人设：${p.name}（${p.icon}）
-- 人设风格：${p.desc}
-- 内容类型：${ctLabel}
-- 时长要求：${dur}秒
-- 商家细节：${extra||'无'}
-- 核心信息：${core||'无'}
+商家：${biz}，${city}
+人设：${p.name}（${p.desc}）
+内容：${ctLabel}，${dur}秒
+细节：${extra||'无'}
+核心：${core||'无'}
 
-## 创作铁律（必须遵守）
-1. **禁止编造对话**（"顾客说…"），直接讲感受和现象
-2. **禁止金句对仗升华**，停在具体的事上
-3. **禁止广告腔结尾**（"欢迎来坐坐"），话说完就停
-4. **像跟邻居聊天**：句子可以碎、有语气词、有停顿，不说教、不总结、不表演
-5. **真老板语感**：有点累、有点倔、有点认命但也有点骄傲
-6. **负面情绪开头更有力**：后悔/焦虑/愤怒/纠结比正能量更抓人
-7. **数字和细节**比形容词有力100倍（不要"很新鲜"，要"屠宰到上桌不超过四小时"）
-8. 植入信息放在后半段，自然带出，不要硬塞
+铁律：
+1. 不编造对话，直接讲感受
+2. 不喊口号不升华，停在具体的事上
+3. 不收广告腔，话说完就停
+4. 像跟邻居聊天：句子碎、有语气词、有停顿
+5. 负面情绪开头更有力
+6. 数字和细节比形容词有力100倍
 
-## 输出格式
-直接输出完整脚本，按时间段标注：
+输出格式（严格）：
 【0-X秒 钩子】
-（一句话抓注意力）
-
+...
 【X-Y秒 展开】
-（细节故事，制造情绪起伏）
-
+...
 【Y-Z秒 转折/升华】
-（价值观，但不要喊口号）
-
+...
 【Z-W秒 收尾】
-（低调自然结束）
+...
 
-## 额外输出
-在脚本末尾，添加一段 B-roll拍摄建议（每个时间段配画面描述+拍摄技巧）。
+脚本末尾加 B-roll拍摄建议（每个时间段配画面+技巧）。
 
-现在为这个${biz}老板创作一条独特的、有灵魂的口播脚本。不要套模板，每次都要全新创作。`;
+每次必须全新创作，不要套模板。`;
 }
 
-async function callDeepSeek(systemPrompt){
-  const key=getApiKey();
-  if(!key)throw new Error('API key not configured');
-  const resp=await fetch('https://api.deepseek.com/chat/completions',{
-    method:'POST',
-    headers:{'Content-Type':'application/json','Authorization':'Bearer '+key},
-    body:JSON.stringify({
-      model:'deepseek-chat',
-      messages:[
-        {role:'system',content:systemPrompt},
-        {role:'user',content:'请创作这条口播脚本。要求真实、有灵魂、口语化，不要套模板。'}
-      ],
-      temperature:0.9,
-      max_tokens:2000
-    })
-  });
-  if(!resp.ok){const e=await resp.json();throw new Error(e.error?.message||'API error '+resp.status)}
-  const data=await resp.json();
-  return data.choices[0].message.content;
+async function callAI(prompt){
+  const key=getApiKey();if(!key)throw new Error('未配置API Key');
+  const r=await fetch('https://api.deepseek.com/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+key},body:JSON.stringify({model:'deepseek-chat',messages:[{role:'system',content:prompt},{role:'user',content:'请创作这条口播脚本，要真实有灵魂'}],temperature:0.95,max_tokens:2000})});
+  if(!r.ok){const e=await r.json();throw new Error(e.error?.message||'API错误')}
+  const d=await r.json();return d.choices[0].message.content;
 }
 
-function parseScript(text){
-  const parts=text.match(/【([^】]+)】([\s\S]*?)(?=【|B-roll|拍摄建议|$)/g)||[];
-  const script=parts.filter(p=>!p.match(/B-roll|拍摄建议/i)).join('\n\n').trim()||text;
-  const brollMatch=text.match(/B-roll[^：:]*[：:]([\s\S]*)/i)||text.match(/拍摄建议[：:]([\s\S]*)/i);
+function parseResult(text){
+  const bm=text.match(/B-roll[^：:]*[：:]([\s\S]*)/i)||text.match(/拍摄建议[：:]([\s\S]*)/i);
   let broll=[];
-  if(brollMatch){
-    const items=brollMatch[1].split(/\d+[\.\、]/).filter(Boolean);
-    broll=items.map(item=>{const t=item.match(/[（(]([^)）]+)[)）]/);return{desc:item.trim().substring(0,80),tip:t?t[1]:'自然光拍摄'}});
-    if(broll.length===0){const lines=brollMatch[1].split('\n').filter(Boolean).slice(0,4);broll=lines.map(l=>({desc:l.trim().substring(0,80),tip:''}))}
-  }
-  if(broll.length===0)broll=[{desc:'老板直视镜头开场',tip:'特写，自然光'},{desc:'店内空镜或后厨画面',tip:'手持轻微晃动'},{desc:'顾客用餐或互动镜头',tip:'抓拍'},{desc:'老板自然收尾',tip:'不要摆拍'}];
-  return{script,broll};
+  if(bm){const ls=bm[1].split('\n').filter(Boolean).slice(0,4);broll=ls.map(l=>({desc:l.trim().substring(0,80),tip:''}))}
+  if(!broll.length)broll=[{desc:'老板直视镜头开场',tip:'特写自然光'},{desc:'店内空镜或后厨',tip:'手持晃动'},{desc:'顾客用餐互动',tip:'抓拍'},{desc:'老板自然收尾',tip:'不摆拍'}];
+  return{script:text.replace(/B-roll[\s\S]*/i,'').trim()||text,broll};
 }
 
-/* ═════════ GENERATE ═════════ */
 async function generateScript(){
   if(!currentUser){showToast('请先登录');$('authModal').classList.add('active');return}
-  if(!getApiKey()){showToast('⚠️ 管理员未配置AI引擎');return}
-  const pk=getPersona();if(!pk){showToast('请先选择人设');return}
+  if(!getApiKey()){showToast('管理员未配置AI引擎');return}
+  const pk=getPersona();if(!pk){showToast('请选择人设');return}
   if(!await deductPoints())return;
-  const biz=getBizName(),city=getCity(),ctLabel=CT[getContentType()],dur=getDuration(),extra=getExtra(),core=getCore();
-  const s=$('spinner'),b=$('btnGenerate');s.classList.add('active');b.disabled=true;b.innerHTML='<span class="spinner" id="spinner"></span>🤖 AI 创作中...';
+  const b=$('btnGenerate');b.disabled=true;b.innerHTML='🤖 AI创作中...';
   try{
-    const prompt=buildSystemPrompt(pk,biz,city,ctLabel,dur,extra,core);
-    const text=await callDeepSeek(prompt);
-    const{script,broll}=parseScript(text);
-    const p=PERSONAS[pk];
-    currentScript={script,meta:biz+' · '+p.name+' · '+ctLabel+' · '+dur+'秒 · '+city,persona:p,analysis:{人设:p.name,类型:ctLabel,锚点:'AI实时创作',开篇:'AI生成',情绪:'独特不重复',结构:p.desc.split('→').slice(0,3).join('→'),去AI:'口语化，真老板语感'},broll};
+    const prompt=buildPrompt(pk,getBizName(),getCity(),CT[getContentType()],getDuration(),getExtra(),getCore());
+    const text=await callAI(prompt);
+    const{script,broll}=parseResult(text);
+    currentScript={script,meta:getBizName()+' · '+PERSONAS[pk].name+' · '+CT[getContentType()]+' · '+getDuration()+'秒',persona:PERSONAS[pk],analysis:{人设:PERSONAS[pk].name,类型:CT[getContentType()],引擎:'DEEPSEEK AI',风格:'每次独一无二',去AI:'真老板语感'},broll};
     displayResult(currentScript);
-  }catch(e){
-    showToast('生成失败：'+e.message);console.error(e);
-  }
-  s.classList.remove('active');b.disabled=false;updatePointsUI();
+  }catch(e){showToast('生成失败：'+e.message)}
+  b.disabled=false;updatePointsUI();
 }
 
 async function batchGenerate(){
-  if(!currentUser){showToast('请先登录');$('authModal').classList.add('active');return}
-  if(!getApiKey()){showToast('⚠️ 管理员未配置AI引擎');return}
-  const pk=getPersona();if(!pk){showToast('请先选择人设');return}
-  const needed=POINTS_PER_GEN*3,pts=await getUserPoints();if(pts<needed){showToast('积分不足！需'+needed+'积分');return}
-  await setUserPoints(pts-needed);updatePointsUI();
-  batchResults=[];$('batchPanel').style.display='block';$('batchGrid').innerHTML='<p style="text-align:center;color:var(--text2);grid-column:1/-1">🤖 AI 正在同时创作 3 个版本...</p>';
-  const biz=getBizName(),city=getCity(),ctLabel=CT[getContentType()],dur=getDuration(),extra=getExtra(),core=getCore();
-  const promises=[];
-  for(let i=0;i<3;i++){
-    promises.push((async()=>{
-      const text=await callDeepSeek(buildSystemPrompt(pk,biz,city,ctLabel,dur,extra,core));
-      const{script,broll}=parseScript(text);
-      const p=PERSONAS[pk];
-      const sc={script,meta:biz+' · '+p.name+' · '+ctLabel+' · '+dur+'秒 · '+city,persona:p,analysis:{人设:p.name,类型:ctLabel,锚点:'AI实时创作',开篇:'AI生成',情绪:'独特不重复',结构:p.desc.split('→').slice(0,3).join('→'),去AI:'口语化'},broll};
-      batchResults.push(sc);renderBatchResults();if(batchResults.length===1)displayResult(sc);
-    })());
-  }
-  await Promise.all(promises);
+  if(!currentUser){showToast('请先登录');return}
+  if(!getApiKey()){showToast('管理员未配置AI引擎');return}
+  const pk=getPersona();if(!pk)return;
+  const pts=await getUserPoints();if(pts<6){showToast('积分不足');return}
+  await dbSetPoints(currentUser.username,pts-6);updatePointsUI();
+  batchResults=[];$('batchPanel').style.display='block';$('batchGrid').innerHTML='<p style="text-align:center;grid-column:1/-1">🤖 AI创作中...</p>';
+  const pms=[];for(let i=0;i<3;i++)pms.push((async()=>{const t=await callAI(buildPrompt(pk,getBizName(),getCity(),CT[getContentType()],getDuration(),getExtra(),getCore()));const{script,broll}=parseResult(t);const s={script,meta:getBizName()+' · '+PERSONAS[pk].name+' · '+getDuration()+'秒',persona:PERSONAS[pk],analysis:{人设:PERSONAS[pk].name},broll};batchResults.push(s);renderBatchResults();if(batchResults.length===1)displayResult(s)})());
+  await Promise.all(pms);
 }
 
-function renderBatchResults(){$('batchGrid').innerHTML=batchResults.map((sc,i)=>`<div class="batch-card"><div class="bc-header">📝 AI版 ${i+1}</div><div class="bc-body">${sc.script}</div><div class="bc-actions"><button class="btn-action save" onclick="selectBatch(${i})">💾 保存</button><button class="btn-action" onclick="viewBatch(${i})">📖 详情</button><button class="btn-action" onclick="copyBatch(${i})">📋 复制</button></div></div>`).join('');$('batchPanel').scrollIntoView({behavior:'smooth'})}
-function selectBatch(i){if(!currentUser){showToast('请先登录');return}currentScript=batchResults[i];saveToLibrary()}
-function viewBatch(i){currentScript=batchResults[i];displayResult(currentScript);$('resultPanel').scrollIntoView({behavior:'smooth'})}
-function copyBatch(i){navigator.clipboard.writeText(batchResults[i].script).then(()=>showToast('✅ 已复制'))}
+function renderBatchResults(){$('batchGrid').innerHTML=batchResults.map((s,i)=>`<div class="batch-card"><div class="bc-header">AI版${i+1}</div><div class="bc-body">${s.script}</div><div class="bc-actions"><button class="btn-action save" onclick="selectBatch(${i})">💾保存</button><button class="btn-action" onclick="viewBatch(${i})">📖查看</button><button class="btn-action" onclick="copyBatch(${i})">📋复制</button></div></div>`).join('')}
+function selectBatch(i){currentScript=batchResults[i];saveToLibrary()}
+function viewBatch(i){currentScript=batchResults[i];displayResult(currentScript)}
+function copyBatch(i){navigator.clipboard.writeText(batchResults[i].script).then(()=>showToast('已复制'))}
 
-function displayResult(sc){currentScript=sc;$('scriptMeta').textContent=sc.meta;$('scriptContent').textContent=sc.script;$('scriptContent').setAttribute('contenteditable','false');isEditing=false;$('editBtnText').textContent='编辑';
-  let ah='<div class="analysis-grid">';for(const[k,v]of Object.entries(sc.analysis))ah+='<div class="analysis-item"><div class="label">'+k+'</div><div class="value">'+v+'</div></div>';ah+='</div>';$('scriptAnalysis').innerHTML=ah;
-  $('brollSection').innerHTML='<h4>🎥 B-roll 拍摄建议</h4><div class="broll-grid">'+sc.broll.map(s=>'<div class="broll-item"><strong>🕐</strong>'+s.desc+'<br><small>💡 '+s.tip+'</small></div>').join('')+'</div>';
-  $('resultPanel').classList.add('visible');$('resultPanel').scrollIntoView({behavior:'smooth'});}
-function toggleEdit(){if(!currentScript)return;isEditing=!isEditing;$('scriptContent').setAttribute('contenteditable',isEditing?'true':'false');$('editBtnText').textContent=isEditing?'保存':'编辑';if(!isEditing){currentScript.script=$('scriptContent').textContent;if(currentUser)saveToLibrary()}}
-async function saveToLibrary(){if(!currentUser){showToast('请先登录');return}if(!currentScript)return;if(isEditing)currentScript.script=$('scriptContent').textContent;const e={id:Date.now().toString(36)+Math.random().toString(36).substr(2,5),script:currentScript.script,meta:currentScript.meta,analysis:currentScript.analysis,broll:currentScript.broll,persona:getPersona(),biz:getBizName(),city:getCity(),contentType:getContentType(),duration:getDuration(),tags:getTags(),createdAt:new Date().toISOString()};await dbSaveScript(e);savedScripts.unshift(e);showToast('✅ 已保存')}
+function displayResult(s){currentScript=s;$('scriptMeta').textContent=s.meta;$('scriptContent').textContent=s.script;$('scriptContent').setAttribute('contenteditable','false');isEditing=false;
+  let ah='<div class="analysis-grid">';for(const[k,v]of Object.entries(s.analysis))ah+='<div class="analysis-item"><div class="label">'+k+'</div><div class="value">'+v+'</div></div>';ah+='</div>';$('scriptAnalysis').innerHTML=ah;
+  $('brollSection').innerHTML='<h4>🎥 B-roll</h4><div class="broll-grid">'+s.broll.map(b=>'<div class="broll-item">'+b.desc+'</div>').join('')+'</div>';
+  $('resultPanel').classList.add('visible');$('resultPanel').scrollIntoView({behavior:'smooth'})}
+function toggleEdit(){isEditing=!isEditing;$('scriptContent').setAttribute('contenteditable',isEditing?'true':'false');$('editBtnText').textContent=isEditing?'保存':'编辑';if(!isEditing&&currentUser)saveToLibrary()}
+async function saveToLibrary(){if(!currentUser)return;const e={id:Date.now().toString(36)+Math.random().toString(36).substr(2,5),script:currentScript.script,meta:currentScript.meta,analysis:currentScript.analysis,broll:currentScript.broll,persona:getPersona(),biz:getBizName(),city:getCity(),contentType:getContentType(),duration:getDuration(),tags:getTags(),createdAt:new Date().toISOString()};await dbSaveScript(e);savedScripts.unshift(e);showToast('已保存')}
 function regenerateScript(){generateScript()}
-function copyScript(){navigator.clipboard.writeText($('scriptContent').textContent).then(()=>showToast('✅ 已复制'))}
-function downloadScript(){const t=$('scriptContent').textContent,m=$('scriptMeta').textContent;const b=new Blob([m+'\n\n'+t],{type:'text/plain;charset=utf-8'}),u=URL.createObjectURL(b),a=document.createElement('a');a.href=u;a.download=m.replace(/[\/:]/g,'-')+'.txt';a.click();URL.revokeObjectURL(u)}
+function copyScript(){navigator.clipboard.writeText($('scriptContent').textContent).then(()=>showToast('已复制'))}
+function downloadScript(){const t=$('scriptContent').textContent;const b=new Blob([t],{type:'text/plain'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='script.txt';a.click()}
 
-/* ═════════ LIBRARY ═════════ */
-async function renderLibrary(){if(!currentUser){$('libraryGrid').innerHTML='';$('libraryEmpty').style.display='block';return}savedScripts=await dbLoadScripts();const fp=$('filterPersona').value,fb=$('filterBiz').value,fs=$('filterSearch').value.toLowerCase();let f=savedScripts;if(fp!=='all')f=f.filter(s=>s.persona===fp);if(fb!=='all')f=f.filter(s=>s.biz===fb);if(fs)f=f.filter(s=>s.script.toLowerCase().includes(fs)||s.meta.toLowerCase().includes(fs)||(s.tags||[]).some(t=>t.toLowerCase().includes(fs)));if(!f.length){$('libraryGrid').innerHTML='';$('libraryEmpty').style.display='block';updateBizFilter();return}$('libraryEmpty').style.display='none';$('libraryGrid').innerHTML=f.map(s=>{const p=PERSONAS[s.persona]||{icon:'?'},pv=s.script.split('\n').slice(1,4).join(' ').substring(0,100);return'<div class="library-card" onclick="loadFromLibrary(\''+s.id+'\')"><div class="lc-header"><span class="lc-meta">'+p.icon+' '+s.meta+'</span><span class="lc-date">'+new Date(s.createdAt).toLocaleDateString('zh-CN')+'</span></div><div class="lc-preview">'+pv+'...</div><div class="lc-tags">'+(s.tags||[]).map(t=>'<span class="lc-tag">#'+t+'</span>').join('')+'</div></div>'}).join('');updateBizFilter()}
-function updateBizFilter(){const f=$('filterBiz'),cv=f.value,bizes=[...new Set(savedScripts.map(s=>s.biz))];f.innerHTML='<option value="all">全部商家</option>'+bizes.map(b=>'<option value="'+b+'">'+b+'</option>').join('');f.value=cv}
-function loadFromLibrary(id){const s=savedScripts.find(s=>s.id===id);if(!s)return;switchPage('generator');$('bizType').value=s.biz;$('city').value=s.city;$('persona').value=s.persona;$('contentType').value=s.contentType;$('duration').value=s.duration;document.querySelectorAll('.persona-card').forEach(c=>{c.classList.remove('active');if(c.dataset.persona===s.persona)c.classList.add('active')});displayResult({script:s.script,meta:s.meta,analysis:s.analysis,broll:s.broll||[],persona:PERSONAS[s.persona]})}
-async function deleteScript(id){if(!confirm('确定删除？'))return;await dbDeleteScript(id);savedScripts=savedScripts.filter(s=>s.id!==id);renderLibrary()}
+async function renderLibrary(){if(!currentUser){$('libraryEmpty').style.display='block';return}savedScripts=await dbLoadScripts();let f=savedScripts;$('libraryEmpty').style.display=f.length?'none':'block';$('libraryGrid').innerHTML=f.map(s=>'<div class="library-card" onclick="loadFromLibrary(\''+s.id+'\')"><div class="lc-header"><span class="lc-meta">'+(PERSONAS[s.persona]||{icon:''}).icon+' '+s.meta+'</span></div><div class="lc-preview">'+s.script.substring(0,120)+'...</div></div>').join('')}
+function loadFromLibrary(id){const s=savedScripts.find(s=>s.id===id);if(!s)return;switchPage('generator');displayResult({script:s.script,meta:s.meta,analysis:s.analysis||{},broll:s.broll||[],persona:PERSONAS[s.persona]||{}})}
 
-/* ═════════ STATS & PROFILE ═════════ */
-async function renderStats(){if(!currentUser)return;savedScripts=await dbLoadScripts();const pts=await getUserPoints(),total=savedScripts.length,personas={};savedScripts.forEach(s=>{personas[s.persona]=(personas[s.persona]||0)+1});const tp=Object.entries(personas).sort((a,b)=>b[1]-a[1])[0];$('statsRow').innerHTML=`<div class="stat-card"><div class="stat-num">${total}</div><div class="stat-label">总保存数</div></div><div class="stat-card"><div class="stat-num">${pts}</div><div class="stat-label">剩余积分</div></div><div class="stat-card"><div class="stat-num">${tp?PERSONAS[tp[0]].icon+' '+PERSONAS[tp[0]].name:'-'}</div><div class="stat-label">最爱人设</div></div><div class="stat-card"><div class="stat-num">${getApiKey()?'✅':'❌'}</div><div class="stat-label">AI引擎</div></div>`}
-async function renderProfile(){if(!currentUser)return;savedScripts=await dbLoadScripts();$('profileName').value=currentUser.username;$('profileDate').value=new Date(currentUser.createdAt).toLocaleDateString('zh-CN');$('profilePoints').value=(await getUserPoints())+' 积分';$('profileCount').value=savedScripts.length+' 条'}
-async function exportAllData(){if(!currentUser)return;savedScripts=await dbLoadScripts();const b=new Blob([JSON.stringify({user:currentUser,scripts:savedScripts},null,2)],{type:'application/json'}),u=URL.createObjectURL(b),a=document.createElement('a');a.href=u;a.download='爆款文案AI_'+currentUser.username+'.json';a.click();URL.revokeObjectURL(u)}
-async function clearAllData(){if(!confirm('确定清除云端所有数据？'))return;const ss=await dbLoadScripts();for(const s of ss)await dbDeleteScript(s.id);savedScripts=[];renderLibrary()}
+async function renderStats(){if(!currentUser)return;savedScripts=await dbLoadScripts();$('statsRow').innerHTML='<div class="stat-card"><div class="stat-num">'+savedScripts.length+'</div><div class="stat-label">总保存</div></div><div class="stat-card"><div class="stat-num">'+(await getUserPoints())+'</div><div class="stat-label">积分</div></div><div class="stat-card"><div class="stat-num">'+(getApiKey()?'✅':'❌')+'</div><div class="stat-label">AI引擎</div></div>'}
+async function renderProfile(){if(!currentUser)return;$('profileName').value=currentUser.username;$('profileDate').value=new Date(currentUser.createdAt).toLocaleDateString();$('profilePoints').value=(await getUserPoints())+'积分'}
+function toggleTheme(){const h=document.documentElement;h.setAttribute('data-theme',h.getAttribute('data-theme')==='dark'?'light':'dark');localStorage.setItem('hbs_theme',h.getAttribute('data-theme'))}
 
-/* ═════════ THEME ═════════ */
-function toggleTheme(){const h=document.documentElement,c=h.getAttribute('data-theme'),n=c==='dark'?'light':'dark';h.setAttribute('data-theme',n);localStorage.setItem('hbs_theme',n)}
-
-/* ═════════ INIT ═════════ */
-document.querySelectorAll('.persona-card').forEach(card=>{card.addEventListener('click',()=>{document.querySelectorAll('.persona-card').forEach(c=>c.classList.remove('active'));card.classList.add('active');$('persona').value=card.dataset.persona})});
-$('bizType').addEventListener('change',function(){const c=$('bizTypeCustom');c.style.display=this.value==='custom'?'block':'none'});
-(async function init(){
-  const t=localStorage.getItem('hbs_theme');if(t)document.documentElement.setAttribute('data-theme',t);
-  apiKey=localStorage.getItem('hbs_ds_key')||'';updateApiBadge();
-  const lu=localStorage.getItem('hbs_last_user');
-  if(lu){const d=await dbGetUser(lu);if(d&&d.password)currentUser={username:lu,createdAt:d.created_at}}
-  await updateAuthUI();renderTemplatesPage();
-  if(location.hash==='#admin')switchPage('admin');
-})();
+document.querySelectorAll('.persona-card').forEach(c=>c.addEventListener('click',()=>{document.querySelectorAll('.persona-card').forEach(x=>x.classList.remove('active'));c.classList.add('active');$('persona').value=c.dataset.persona}));
+$('bizType').addEventListener('change',function(){const c=$('bizTypeCustom');if(c)c.style.display=this.value==='custom'?'block':'none'});
+(async function init(){const t=localStorage.getItem('hbs_theme');if(t)document.documentElement.setAttribute('data-theme',t);apiKey=getApiKey();updateApiBadge();const lu=localStorage.getItem('hbs_last_user');if(lu){const d=await dbGetUser(lu);if(d&&d.password)currentUser={username:lu,createdAt:d.created_at}}await updateAuthUI();renderTemplatesPage();if(location.hash==='#admin')switchPage('admin')})();
 </script>
 </body>
 </html>
