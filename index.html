@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="本地生活商家智能口播脚本生成器，AI驱动，30秒生成爆款文案">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✨</text></svg>">
+<title>爆款文案AI — 本地生活商家智能口播脚本生成器</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root {
+  --bg: #F8FAFC; --surface: #ffffff; --border: #e2e8f0; --text: #1e293b; --text2: #64748b; --text3: #94a3b8;
+  --accent: #F28482; --accent2: #FFB347; --card-bg: #F4F8F9; --green: #059669; --green-bg: #ECFDF5;
+  --shadow: 0 10px 30px -10px rgba(0,0,0,0.1);
+}
+[data-theme="dark"] {
+  --bg: #0f172a; --surface: #1e293b; --border: #334155; --text: #f1f5f9; --text2: #94a3b8; --text3: #64748b;
+  --green-bg: #064e3b; --card-bg: #1a2332;
+  --shadow: 0 10px 30px -10px rgba(0,0,0,0.3);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { background: var(--bg); font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; color: var(--text); line-height: 1.6; }
+.nav { position: sticky; top: 0; z-index: 100; background: var(--surface); border-bottom: 1px solid var(--border); padding: 10px 20px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.nav-logo { font-size: 1.1rem; font-weight: 700; color: var(--text); display: flex; align-items: center; gap: 6px; white-space: nowrap; }
+.nav-logo span { background: linear-gradient(90deg, #FFB347, #E5A1F5); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.nav-links { display: flex; gap: 4px; list-style: none; align-items: center; flex-wrap: wrap; }
+.nav-links a, .nav-links button { text-decoration: none; color: var(--text2); font-size: 0.8rem; font-weight: 500; background: none; border: none; cursor: pointer; font-family: inherit; padding: 5px 10px; border-radius: 7px; transition: all 0.15s; white-space: nowrap; }
+.nav-links a:hover, .nav-links button:hover { color: var(--text); background: var(--bg); }
+.nav-links a.active, .nav-links button.active { color: var(--accent); font-weight: 600; }
+.nav-right { display: flex; align-items: center; gap: 8px; }
+.nav-points { font-size: 0.75rem; font-weight: 600; color: var(--accent2); background: #FFF8F0; padding: 4px 10px; border-radius: 12px; display: none; border: 1px solid #FED7AA; }
+.nav-user { font-size: 0.8rem; color: var(--text2); }
+.btn-theme { width: 30px; height: 30px; border-radius: 7px; border: 1.5px solid var(--border); background: var(--surface); cursor: pointer; font-size: 0.85rem; display: flex; align-items: center; justify-content: center; }
+.page { display: none; }
+.page.active { display: block; }
+.container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+.hero { text-align: center; padding: 50px 20px 30px; max-width: 800px; margin: 0 auto; }
+.hero-badge { display: inline-block; font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; background: linear-gradient(90deg, #F5C344, #F28482, #B567C2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 12px; padding: 4px 14px; border: 1px solid var(--border); border-radius: 20px; }
+.hero h1 { font-size: 2.2rem; font-weight: 700; color: var(--text); letter-spacing: -0.03em; margin-bottom: 10px; }
+.hero h1 span { background: linear-gradient(135deg, #FFB347, #F28482, #B567C2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.hero p { font-size: 0.9rem; color: var(--text2); max-width: 500px; margin: 0 auto; }
+.c1-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 60px; }
+.c1-card { border-radius: 24px; height: 320px; display: flex; flex-direction: column; justify-content: flex-end; position: relative; overflow: hidden; text-align: left; background: var(--card-bg); box-shadow: var(--shadow); transition: transform 0.3s ease, box-shadow 0.3s ease; }
+.c1-card:hover { transform: translateY(-4px); box-shadow: 0 20px 50px -15px rgba(0,0,0,0.15); }
+.c1-card h3 { font-size: 1rem; font-weight: 700; color: var(--text); padding: 0 24px 24px; z-index: 2; position: relative; }
+.c1-card .c1-sub { font-size: 0.72rem; color: var(--text2); padding: 0 24px 6px; z-index: 2; position: relative; }
+.c1-card-1 { background: linear-gradient(160deg, #FFF5EB 0%, #FFF9F0 30%, #FDF2F8 70%, #F4F8F9 100%); }
+.c1-card-2 { background: linear-gradient(160deg, #F5F0FF 0%, #FDF2F8 30%, #FFF5EB 70%, #F4F8F9 100%); }
+.c1-card-3 { background: linear-gradient(160deg, #FFF9F0 0%, #F5F0FF 30%, #FDF2F8 70%, #F4F8F9 100%); }
+[data-theme="dark"] .c1-card-1, [data-theme="dark"] .c1-card-2, [data-theme="dark"] .c1-card-3 { background: linear-gradient(160deg, #1e293b 0%, #1a2332 50%, #1e293b 100%); }
+.c1-card-1 .c1-visual { position: absolute; top: 24px; left: 50%; transform: translateX(-50%); width: 220px; height: 120px; z-index: 1; display: flex; align-items: center; justify-content: center; }
+.c1-card-1 .c1-typing-box { background: white; border-radius: 14px; padding: 16px 18px; width: 100%; box-shadow: 0 4px 20px rgba(0,0,0,0.06); position: relative; }
+.c1-card-1 .c1-typing-box .c1-line { height: 8px; border-radius: 4px; background: #e2e8f0; margin-bottom: 8px; }
+.c1-card-1 .c1-typing-box .c1-line:nth-child(1) { width: 85%; background: linear-gradient(90deg, #FFB347, #F9ED96); }
+.c1-card-1 .c1-typing-box .c1-line:nth-child(2) { width: 60%; background: linear-gradient(90deg, #E5A1F5, #F8ACA0); }
+.c1-card-1 .c1-typing-box .c1-line:nth-child(3) { width: 75%; }
+.c1-card-1 .c1-typing-box .c1-line:nth-child(4) { width: 45%; height: 6px; margin-bottom: 0; }
+.c1-card-1 .c1-cursor-blink { position: absolute; right: 14px; bottom: 12px; width: 2px; height: 14px; background: #FFB347; animation: blink 1s step-end infinite; }
+@keyframes blink { 50% { opacity: 0; } }
+.c1-card-2 .c1-visual { position: absolute; top: 20px; left: 0; right: 0; bottom: 70px; display: flex; align-items: center; justify-content: center; z-index: 1; }
+.c1-card-2 .c1-platform-cards { display: flex; gap: 10px; align-items: center; }
+.c1-card-2 .c1-pf-card { background: white; border-radius: 10px; padding: 10px 12px; box-shadow: 0 3px 12px rgba(0,0,0,0.05); font-size: 0.55rem; line-height: 1.4; width: 90px; position: relative; }
+.c1-card-2 .c1-pf-card:nth-child(1) { transform: rotate(-3deg); border-top: 3px solid #111; }
+.c1-card-2 .c1-pf-card:nth-child(2) { transform: rotate(0deg) translateY(-6px); border-top: 3px solid #FF2442; z-index: 1; }
+.c1-card-2 .c1-pf-card:nth-child(3) { transform: rotate(3deg); border-top: 3px solid #FA9D3B; }
+.c1-card-2 .c1-pf-card .c1-pf-badge { font-size: 0.5rem; font-weight: 700; margin-bottom: 4px; }
+.c1-card-2 .c1-pf-card:nth-child(1) .c1-pf-badge { color: #111; }
+.c1-card-2 .c1-pf-card:nth-child(2) .c1-pf-badge { color: #FF2442; }
+.c1-card-2 .c1-pf-card:nth-child(3) .c1-pf-badge { color: #FA9D3B; }
+.c1-card-2 .c1-pf-card .c1-pf-text { color: #94a3b8; font-size: 0.5rem; }
+.c1-card-2 .c1-pf-card .c1-pf-text b { color: #64748b; }
+.c1-card-3 .c1-visual { position: absolute; top: 18px; left: 0; right: 0; bottom: 70px; display: flex; align-items: center; justify-content: center; z-index: 1; }
+.c1-card-3 .c1-shelf { display: flex; gap: 14px; align-items: flex-end; }
+.c1-card-3 .c1-doc { background: white; border-radius: 10px 10px 4px 4px; box-shadow: 0 4px 16px rgba(0,0,0,0.06); position: relative; display: flex; flex-direction: column; align-items: center; }
+.c1-card-3 .c1-doc:nth-child(1) { width: 48px; height: 64px; border-left: 3px solid #FFB347; }
+.c1-card-3 .c1-doc:nth-child(2) { width: 54px; height: 76px; border-left: 3px solid #E5A1F5; transform: translateY(-4px); }
+.c1-card-3 .c1-doc:nth-child(3) { width: 48px; height: 60px; border-left: 3px solid #F28482; }
+.c1-card-3 .c1-doc .c1-doc-line { height: 3px; border-radius: 2px; background: #e2e8f0; margin-top: 8px; }
+.c1-card-3 .c1-doc:nth-child(1) .c1-doc-line { width: 24px; }
+.c1-card-3 .c1-doc:nth-child(2) .c1-doc-line { width: 28px; margin-top: 10px; }
+.c1-card-3 .c1-doc:nth-child(2) .c1-doc-line:nth-child(3) { width: 18px; }
+.c1-card-3 .c1-doc:nth-child(3) .c1-doc-line { width: 22px; }
+.c1-card-3 .c1-search-badge { position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); background: white; border-radius: 20px; padding: 5px 14px; font-size: 0.7rem; color: var(--text2); box-shadow: 0 2px 10px rgba(0,0,0,0.06); display: flex; align-items: center; gap: 6px; }
+.section-generator { max-width: 900px; margin: 0 auto 50px; }
+.section-title { text-align: center; margin-bottom: 28px; }
+.section-title h2 { font-size: 1.6rem; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+.section-title p { color: var(--text2); font-size: 0.85rem; }
+.form-panel { background: var(--surface); border-radius: 18px; padding: 30px; box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 20px 60px -20px rgba(0,0,0,0.1); }
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 18px; }
+.form-group { display: flex; flex-direction: column; gap: 4px; }
+.form-group.full { grid-column: 1 / -1; }
+.form-group label { font-size: 0.7rem; font-weight: 600; color: var(--text2); text-transform: uppercase; letter-spacing: 0.5px; }
+.form-group select, .form-group textarea, .form-group input { padding: 9px 12px; border: 1.5px solid var(--border); border-radius: 10px; font-size: 0.82rem; font-family: inherit; color: var(--text); background: var(--bg); transition: all 0.2s; outline: none; resize: vertical; }
+.form-group select:focus, .form-group textarea:focus, .form-group input:focus { border-color: #FFB347; box-shadow: 0 0 0 3px rgba(255,179,71,0.15); background: var(--surface); }
+.form-group textarea { min-height: 60px; font-size: 0.78rem; }
+.persona-cards { display: grid; grid-template-columns: repeat(4,1fr); gap: 8px; margin-top: 4px; }
+.persona-card { padding: 10px 6px; border: 2px solid var(--border); border-radius: 10px; text-align: center; cursor: pointer; transition: all 0.2s; background: var(--surface); font-size: 0.75rem; font-weight: 500; }
+.persona-card:hover { border-color: var(--accent); }
+.persona-card.active { border-color: var(--accent); background: linear-gradient(135deg, #FFF1F0, #FFF8F0); font-weight: 600; }
+.persona-card .icon { font-size: 1.2rem; display: block; }
+.btn-row { display: flex; gap: 8px; margin-top: 20px; }
+.btn-generate { flex: 1; padding: 12px; background: linear-gradient(135deg, #FFB347, #F28482); color: white; border: none; border-radius: 10px; font-size: 0.9rem; font-weight: 600; font-family: inherit; cursor: pointer; transition: all 0.25s; display: flex; align-items: center; justify-content: center; gap: 6px; }
+.btn-generate:hover { transform: translateY(-1px); box-shadow: 0 10px 30px -8px rgba(242,132,130,0.4); }
+.btn-generate:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+.btn-secondary { padding: 12px 20px; background: var(--surface); color: var(--text); border: 1.5px solid var(--border); border-radius: 10px; font-size: 0.85rem; font-weight: 500; font-family: inherit; cursor: pointer; transition: all 0.2s; }
+.btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+.result-panel { margin-top: 24px; display: none; }
+.result-panel.visible { display: block; }
+.result-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; flex-wrap: wrap; gap: 8px; }
+.result-badge { font-size: 0.7rem; font-weight: 600; color: var(--green); background: var(--green-bg); padding: 5px 12px; border-radius: 16px; display: flex; align-items: center; gap: 5px; }
+.result-actions { display: flex; gap: 6px; flex-wrap: wrap; }
+.btn-action { padding: 6px 12px; border: 1.5px solid var(--border); border-radius: 8px; background: var(--surface); font-size: 0.73rem; font-weight: 500; cursor: pointer; font-family: inherit; color: var(--text2); display: flex; align-items: center; gap: 4px; transition: all 0.15s; }
+.btn-action:hover { border-color: var(--text3); color: var(--text); }
+.btn-action.danger { color: #ef4444; border-color: #fecaca; }
+.btn-action.danger:hover { background: #fef2f2; }
+.btn-action.save { background: var(--green-bg); color: var(--green); border-color: #A7F3D0; font-weight: 600; }
+.script-card { background: var(--surface); border-radius: 14px; padding: 28px; box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 20px 60px -20px rgba(0,0,0,0.08); position: relative; overflow: hidden; }
+.script-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, #FFB347, #F28482, #E5A1F5); }
+.script-title { font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.8px; color: var(--accent); margin-bottom: 12px; }
+.script-content { font-size: 0.87rem; line-height: 1.9; color: var(--text); white-space: pre-wrap; }
+.script-content[contenteditable="true"] { border: 2px dashed var(--border); border-radius: 8px; padding: 10px; background: var(--bg); outline: none; }
+.script-content[contenteditable="true"]:focus { border-color: var(--accent2); }
+.script-analysis { margin-top: 18px; }
+.analysis-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+.analysis-item { background: var(--bg); border-radius: 8px; padding: 10px; border: 1px solid var(--border); }
+.analysis-item .label { font-size: 0.6rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text3); }
+.analysis-item .value { font-size: 0.75rem; color: var(--text); margin-top: 2px; font-weight: 500; }
+.broll-section { margin-top: 16px; }
+.broll-section h4 { font-size: 0.8rem; font-weight: 600; color: var(--text); margin-bottom: 8px; }
+.broll-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; }
+.broll-item { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 8px; font-size: 0.7rem; color: var(--text2); }
+.broll-item strong { color: var(--accent); display: block; font-size: 0.65rem; margin-bottom: 2px; }
+.batch-panel { margin-top: 24px; }
+.batch-panel h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 16px; color: var(--text); }
+.batch-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.batch-card { background: var(--surface); border-radius: 14px; border: 1px solid var(--border); overflow: hidden; }
+.batch-card .bc-header { padding: 12px 16px; font-size: 0.7rem; font-weight: 600; color: var(--accent); border-bottom: 1px solid var(--border); background: var(--bg); display: flex; justify-content: space-between; align-items: center; }
+.batch-card .bc-body { padding: 16px; font-size: 0.75rem; line-height: 1.8; color: var(--text); white-space: pre-wrap; max-height: 300px; overflow-y: auto; }
+.batch-card .bc-actions { padding: 10px 16px; border-top: 1px solid var(--border); display: flex; gap: 6px; flex-wrap: wrap; }
+.library-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 14px; }
+.library-card { background: var(--surface); border-radius: 12px; padding: 16px; border: 1px solid var(--border); cursor: pointer; transition: all 0.15s; }
+.library-card:hover { border-color: var(--accent2); box-shadow: 0 3px 16px -6px rgba(0,0,0,0.08); }
+.library-card .lc-header { display: flex; justify-content: space-between; align-items: start; margin-bottom: 6px; }
+.library-card .lc-meta { font-size: 0.65rem; color: var(--accent); font-weight: 600; }
+.library-card .lc-date { font-size: 0.65rem; color: var(--text3); }
+.library-card .lc-preview { font-size: 0.75rem; color: var(--text2); line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.library-card .lc-tags { display: flex; gap: 4px; margin-top: 8px; flex-wrap: wrap; }
+.library-card .lc-tag { font-size: 0.6rem; padding: 2px 6px; border-radius: 5px; background: var(--bg); color: var(--text2); }
+.library-filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 18px; }
+.library-filters select, .library-filters input { padding: 7px 10px; border: 1.5px solid var(--border); border-radius: 8px; font-size: 0.75rem; background: var(--surface); color: var(--text); font-family: inherit; }
+.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 200; align-items: center; justify-content: center; }
+.modal-overlay.active { display: flex; }
+.modal { background: var(--surface); border-radius: 16px; padding: 28px; max-width: 420px; width: 90%; box-shadow: 0 20px 60px rgba(0,0,0,0.2); max-height: 90vh; overflow-y: auto; }
+.modal h2 { font-size: 1.2rem; font-weight: 700; margin-bottom: 18px; color: var(--text); }
+.modal .form-group { margin-bottom: 12px; }
+.modal .btn-row { margin-top: 16px; }
+.modal .modal-switch { text-align: center; margin-top: 12px; font-size: 0.78rem; color: var(--text2); }
+.modal .modal-switch a { color: var(--accent); cursor: pointer; font-weight: 600; text-decoration: none; }
+.stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 28px; }
+.stat-card { background: var(--surface); border-radius: 12px; padding: 18px; text-align: center; border: 1px solid var(--border); }
+.stat-card .stat-num { font-size: 1.6rem; font-weight: 700; color: var(--accent); }
+.stat-card .stat-label { font-size: 0.7rem; color: var(--text2); margin-top: 3px; }
+.toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(100px); background: #0f172a; color: white; padding: 10px 20px; border-radius: 10px; font-size: 0.8rem; font-weight: 500; z-index: 300; transition: transform 0.3s ease; pointer-events: none; }
+.toast.show { transform: translateX(-50%) translateY(0); }
+.spinner { display: none; width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: spin 0.7s linear infinite; }
+.spinner.active { display: inline-block; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.empty-state { text-align: center; padding: 50px 20px; color: var(--text3); }
+.empty-state .icon { font-size: 2.5rem; margin-bottom: 10px; }
+.template-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+.alert { padding: 10px 16px; border-radius: 10px; font-size: 0.8rem; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+.alert-warn { background: #FEF3C7; color: #92400e; border: 1px solid #FCD34D; }
+@media(max-width:900px){.c1-grid{grid-template-columns:repeat(2,1fr)}.form-grid{grid-template-columns:1fr}.persona-cards{grid-template-columns:repeat(2,1fr)}.analysis-grid{grid-template-columns:1fr}.stats-row{grid-template-columns:repeat(2,1fr)}.batch-grid{grid-template-columns:1fr}.library-grid{grid-template-columns:1fr}.broll-grid{grid-template-columns:1fr}.template-grid{grid-template-columns:1fr}}
+@media(max-width:600px){.hero h1{font-size:1.6rem}.c1-grid{grid-template-columns:1fr}.form-panel{padding:18px}.persona-cards{grid-template-columns:1fr 1fr}.script-card{padding:18px}.nav-links{gap:1px}.nav-links a,.nav-links button{font-size:0.7rem;padding:3px 6px}}
+</style>
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-logo">✦ <span>爆款文案AI</span></div>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#generator" class="active" onclick="switchPage('generator')">🎬 生成</a></li>
+    <li><a href="#library" onclick="switchPage('library')">📚 文案库</a></li>
+    <li><a href="#templates" onclick="switchPage('templates')">📋 模板</a></li>
+    <li><button onclick="switchPage('stats')">📊 统计</button></li>
+  </ul>
+  <div class="nav-right">
+    <span class="nav-points" id="pointsDisplay">⭐ 600</span>
+    <button class="btn-theme" onclick="toggleTheme()" title="切换主题">🌓</button>
+    <a href="#admin" onclick="switchPage('admin');return false" style="font-size:0.7rem;color:var(--text3);text-decoration:none;padding:2px 4px" title="管理员后台">🔑</a>
+    <span class="nav-user" id="usernameDisplay" style="cursor:pointer" onclick="switchPage('profile')">未登录</span>
+    <button onclick="handleAuthBtn()" id="authBtn" style="font-size:0.75rem;padding:5px 10px;background:linear-gradient(135deg,#FFB347,#F28482);color:white;border:none;border-radius:7px;cursor:pointer;font-family:inherit;font-weight:600">登录</button>
+  </div>
+</nav>
+
+<div class="page active" id="page-generator">
+  <section class="hero"><div class="hero-badge">🚀 AI 驱动 · 本地生活专用</div><h1>从<span>一句话</span>到<span>爆款脚本</span><br>只需要 30 秒</h1><p>选人设、填细节、点生成。注册后每生成一条消耗 <strong>2 积分</strong>，新用户赠送 <strong>600 积分</strong>。</p></section>
+  <div class="container c1-grid">
+    <div class="c1-card c1-card-1"><div class="c1-visual"><div class="c1-typing-box"><div class="c1-line"></div><div class="c1-line"></div><div class="c1-line"></div><div class="c1-line"></div><div class="c1-cursor-blink"></div></div></div><div class="c1-sub">AI 引擎 · 秒级出稿</div><h3>智能文案生成</h3></div>
+    <div class="c1-card c1-card-2"><div class="c1-visual"><div class="c1-platform-cards"><div class="c1-pf-card"><div class="c1-pf-badge">🎵 抖音版</div><div class="c1-pf-text">快节奏 · <b>钩子前置</b><br>口语化 · 强情绪</div></div><div class="c1-pf-card"><div class="c1-pf-badge">📕 小红书版</div><div class="c1-pf-text">图文感 · <b>精致排版</b><br>种草向 · 真实感</div></div><div class="c1-pf-card"><div class="c1-pf-badge">▶️ 视频号版</div><div class="c1-pf-text">娓娓道来 · <b>深度叙事</b><br>信任感 · 娓婉转</div></div></div></div><div class="c1-sub">一套内容 · 多平台风格</div><h3>跨平台文案适配</h3></div>
+    <div class="c1-card c1-card-3"><div class="c1-visual"><div class="c1-shelf"><div class="c1-doc"><div class="c1-doc-line"></div><div class="c1-doc-line"></div></div><div class="c1-doc"><div class="c1-doc-line"></div><div class="c1-doc-line"></div><div class="c1-doc-line"></div></div><div class="c1-doc"><div class="c1-doc-line"></div><div class="c1-doc-line"></div></div></div><div class="c1-search-badge">🔍 搜索历史文案</div></div><div class="c1-sub">云端存储 · 随时复用</div><h3>个人文案库</h3></div>
+  </div>
+
+  <section id="generator" class="container section-generator">
+    <div class="section-title"><h2>🎬 开始生成你的口播脚本</h2><p>填得越具体，文案越有灵魂</p></div>
+    <div id="pointsWarning" class="alert alert-warn" style="display:none">⚠️ 积分不足！当前剩余 <strong id="pointsWarningNum">0</strong> 积分，每次生成消耗 2 积分。请联系管理员获取邀请码或充值积分。</div>
+    <div class="form-panel"><div class="form-grid">
+      <div class="form-group"><label>🍽️ 商家类型</label><select id="bizType"><option value="">请选择...</option><option value="川菜馆">川菜馆</option><option value="火锅店">火锅店</option><option value="烧烤店">烧烤店</option><option value="面馆">面馆/粉店</option><option value="小吃店">小吃/炸串/卤味</option><option value="奶茶店">奶茶/饮品</option><option value="烘焙店">烘焙/甜品</option><option value="西餐厅">西餐/轻食</option><option value="日料店">日料/居酒屋</option><option value="大排档">大排档/宵夜</option><option value="custom">其他（自填）</option></select><input type="text" id="bizTypeCustom" placeholder="输入商家类型" style="display:none;margin-top:4px;"></div>
+      <div class="form-group"><label>📍 城市</label><input type="text" id="city" placeholder="如：成都锦江区"></div>
+      <div class="form-group full"><label>🎭 人设（必选）</label><div class="persona-cards"><div class="persona-card" data-persona="regret"><span class="icon">😅</span>后悔型</div><div class="persona-card" data-persona="gang"><span class="icon">😤</span>杠精型</div><div class="persona-card" data-persona="honest"><span class="icon">🤝</span>实在型</div><div class="persona-card" data-persona="craft"><span class="icon">🔪</span>匠心型</div></div><input type="hidden" id="persona" value=""></div>
+      <div class="form-group"><label>📹 内容类型</label><select id="contentType"><option value="founder">置顶/创始人故事</option><option value="story" selected>小经历分享</option><option value="opinion">说观点类</option><option value="pain">痛点极致化</option><option value="process">晒过程/晒案例</option><option value="knowledge">教知识类</option><option value="product">说产品/带货</option></select></div>
+      <div class="form-group"><label>⏱️ 时长</label><select id="duration"><option value="50">50秒</option><option value="60" selected>60秒</option><option value="70">70秒</option><option value="90">90秒</option><option value="120">120秒</option></select></div>
+      <div class="form-group full"><label>💡 特殊细节</label><textarea id="extraDetails" placeholder="比如：开了三年、招牌是水煮鱼、老顾客叫他老王..."></textarea></div>
+      <div class="form-group full"><label>🎯 核心信息（可选）</label><textarea id="coreMessage" placeholder="一句话说清你最想让顾客记住的事"></textarea></div>
+      <div class="form-group full"><label>🏷️ 标签（逗号分隔）</label><input type="text" id="tags" placeholder="如：川菜,减脂,新店开业"></div>
+    </div>
+    <div class="btn-row">
+      <button class="btn-generate" id="btnGenerate" onclick="generateScript()"><span class="spinner" id="spinner"></span>✨ 生成口播脚本</button>
+      <button class="btn-secondary" onclick="batchGenerate()">⚡ 批量预览 3 版</button>
+    </div></div>
+
+    <div class="result-panel" id="resultPanel">
+      <div class="result-header"><span class="result-badge">✅ 已生成</span><div class="result-actions"><button class="btn-action" onclick="toggleEdit()">✏️ <span id="editBtnText">编辑</span></button><button class="btn-action save" onclick="saveToLibrary()">💾 保存到云端</button><button class="btn-action" onclick="copyScript()">📋 复制</button><button class="btn-action" onclick="downloadScript()">⬇ 下载</button><button class="btn-action" onclick="regenerateScript()">🔄 换一版</button></div></div>
+      <div class="script-card"><div class="script-title" id="scriptMeta"></div><div class="script-content" id="scriptContent"></div><div class="broll-section" id="brollSection"></div><div class="script-analysis" id="scriptAnalysis"></div></div>
+    </div>
+    <div class="batch-panel" id="batchPanel" style="display:none"><h3>📦 批量生成结果（3 版预览 — 选择满意的保存）</h3><div class="batch-grid" id="batchGrid"></div></div>
+  </section>
+</div>
+
+<div class="page" id="page-library">
+  <div class="container" style="padding-top:40px">
+    <div class="section-title"><h2>📚 我的云端文案库</h2><p id="libraryLoginHint">登录后可查看和管理所有保存的脚本</p></div>
+    <div class="library-filters"><select id="filterPersona" onchange="renderLibrary()"><option value="all">全部人设</option><option value="regret">后悔型</option><option value="gang">杠精型</option><option value="honest">实在型</option><option value="craft">匠心型</option></select><select id="filterBiz" onchange="renderLibrary()"><option value="all">全部商家</option></select><input type="text" id="filterSearch" placeholder="🔍 搜索文案..." oninput="renderLibrary()"></div>
+    <div class="library-grid" id="libraryGrid"></div>
+    <div class="empty-state" id="libraryEmpty"><div class="icon">📭</div><p>还没有保存过文案<br>生成脚本后点击「💾 保存到云端」即可</p></div>
+  </div>
+</div>
+
+<div class="page" id="page-templates">
+  <div class="container" style="padding-top:40px"><div class="section-title"><h2>📋 爆款模板库</h2><p>点击任意模板直接套用</p></div><div class="template-grid" id="templateGrid"></div></div>
+</div>
+
+<div class="page" id="page-stats">
+  <div class="container" style="padding-top:40px"><div class="section-title"><h2>📊 生成统计</h2></div><div class="stats-row" id="statsRow"></div><h3 style="margin-bottom:12px;font-size:0.95rem">最近生成</h3><div class="library-grid" id="recentScripts"></div></div>
+</div>
+
+<div class="page" id="page-profile">
+  <div class="container" style="padding-top:40px"><div class="section-title"><h2>👤 个人设置</h2></div>
+    <div class="form-panel" style="max-width:500px;margin:0 auto">
+      <div class="form-group"><label>用户名</label><input type="text" id="profileName" disabled></div>
+      <div class="form-group"><label>注册时间</label><input type="text" id="profileDate" disabled></div>
+      <div class="form-group"><label>剩余积分</label><input type="text" id="profilePoints" disabled></div>
+      <div class="form-group"><label>已保存文案数</label><input type="text" id="profileCount" disabled></div>
+      <div class="btn-row"><button class="btn-secondary" onclick="exportAllData()" style="flex:1">📦 导出全部数据</button><button class="btn-action danger" onclick="clearAllData()" style="flex:1">🗑️ 清除云端数据</button></div>
+    </div>
+  </div>
+</div>
+
+<div class="page" id="page-admin">
+  <div class="container" style="padding-top:40px"><div class="section-title"><h2>🔑 管理员面板</h2><p>管理邀请码和用户积分（数据存储在云端）</p></div>
+    <div class="form-panel" style="max-width:600px;margin:0 auto 24px">
+      <h3 style="font-size:1rem;margin-bottom:14px">生成邀请码</h3>
+      <div class="form-grid"><div class="form-group"><label>数量</label><select id="inviteCount"><option value="1">1 个</option><option value="5" selected>5 个</option><option value="10">10 个</option><option value="20">20 个</option></select></div><div class="form-group"><label>赠送积分</label><input type="number" id="invitePoints" value="600" min="100" max="10000" step="100"></div></div>
+      <div class="btn-row"><button class="btn-generate" onclick="generateInviteCodes()">🎫 生成邀请码</button></div>
+    </div>
+    <div class="form-panel" style="max-width:600px;margin:0 auto 24px">
+      <h3 style="font-size:1rem;margin-bottom:14px">给用户充值积分</h3>
+      <div class="form-grid"><div class="form-group"><label>用户名</label><input type="text" id="rechargeUser" placeholder="输入用户名"></div><div class="form-group"><label>积分数量</label><input type="number" id="rechargePoints" value="100" min="10" max="10000" step="10"></div></div>
+      <div class="btn-row"><button class="btn-generate" onclick="rechargeUserPoints()">💰 充值积分</button></div>
+    </div>
+    <div class="form-panel" style="max-width:600px;margin:0 auto">
+      <h3 style="font-size:1rem;margin-bottom:14px">邀请码列表</h3>
+      <div id="inviteCodeList" style="font-size:0.78rem;max-height:300px;overflow-y:auto">加载中...</div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="authModal"><div class="modal">
+  <h2 id="authModalTitle">登录</h2>
+  <div class="form-group"><label>用户名</label><input type="text" id="authUsername" placeholder="输入用户名"></div>
+  <div class="form-group"><label>密码</label><input type="password" id="authPassword" placeholder="输入密码"></div>
+  <div class="form-group" id="confirmPwGroup" style="display:none"><label>确认密码</label><input type="password" id="authConfirmPw" placeholder="再次输入密码"></div>
+  <div class="form-group" id="inviteCodeGroup" style="display:none"><label>🔑 邀请码（必填）</label><input type="text" id="authInviteCode" placeholder="输入管理员提供的邀请码"></div>
+  <div class="btn-row"><button class="btn-generate" onclick="doAuth()" id="authSubmitBtn">登录</button></div>
+  <div class="modal-switch" id="authSwitch">还没有账号？<a onclick="toggleAuthMode()">去注册</a></div>
+  <div class="modal-switch"><a onclick="closeAuth()" style="color:var(--text3)">取消</a></div>
+</div></div>
+
+<div class="modal-overlay" id="adminModal"><div class="modal">
+  <h2 id="adminModalTitle">🔐 管理员登录</h2>
+  <div class="form-group"><label>管理员用户名</label><input type="text" id="adminUsername" placeholder="输入管理员用户名"></div>
+  <div class="form-group"><label>管理员密码</label><input type="password" id="adminPassword" placeholder="输入管理员密码" onkeydown="if(event.key==='Enter')doAdminAuth()"></div>
+  <div class="form-group" id="adminSetupMode" style="display:none"><label>确认密码</label><input type="password" id="adminConfirmPw" placeholder="再次输入密码" onkeydown="if(event.key==='Enter')doAdminAuth()"></div>
+  <div class="btn-row"><button class="btn-generate" onclick="doAdminAuth()">登录</button></div>
+  <div class="modal-switch"><a onclick="$('adminModal').classList.remove('active')" style="color:var(--text3);cursor:pointer">取消</a></div>
+</div></div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ═════════ SUPABASE INIT ═════════ */
+const SB_URL='https://ahqqyjyshghrwxivmdji.supabase.co';
+const SB_KEY='sb_publishable_GDSciFYC9JotNpoQQ_QS7A_kPSniJoc';
+const sb=window.supabase.createClient(SB_URL,SB_KEY);
+
+/* ═════════ STATE ═════════ */
+let currentUser=null,authMode='login',currentScript=null,isEditing=false,savedScripts=[],batchResults=[],isAdmin=false;
+const POINTS_PER_GEN=2,DEFAULT_POINTS=600;
+const PERSONAS={regret:{name:'后悔型',icon:'😅',hook:['我最后悔的一件事，就是开了这家店。','说实话，我真的后悔了。不是标题党，是真的。','如果时光能倒流，我可能不会选择开这个店。但回不去了。','你们看我表面笑嘻嘻的，背地里我真的想过无数次——不干了。'],closer:['今晚还有几桌空位，想吃热乎的早点来。','今天备货不多，来晚了真没办法。不是饥饿营销，是真做不出那么多。','晚上见。趁我还没后悔关门，赶紧来。','我在店里，随时来。来之前看一眼我还在不在——开玩笑的。'],pattern:'负面开头→细节展开→凡尔赛反转→低调收尾'},gang:{name:'杠精型',icon:'😤',hook:['嫌贵就不要来吃。我今天把话放这儿了。','有人说我家太贵了——你说得对，我今天就跟你好好聊聊为什么贵。','我今天可能要得罪一些人，但憋了很久了，今天必须说。','我直接一点——如果你只在乎价格不在乎味道，这个视频你现在就可以划走。'],closer:['今天还剩最后几份，先到先得。不预留，不外卖，自己来。','觉得不值的，吃完来找我，退你钱。我说到做到。','能吃辣的，你放马过来。吃不了辣的，旁边有清汤锅。','我每天都在，随时来。随时验。真金不怕火炼。'],pattern:'正面硬刚→用细节怼回去→霸气收尾'},honest:{name:'实在型',icon:'🤝',hook:['出大事了。今天必须跟你们说个事儿。','你们天天在评论区说我家的问题，我全部都看了。','我今天要说的话，可能让一些人失望，但我不想骗你们。','做了这么久的店，你们说的每一条意见我都记着。今天给你们一个答复。'],closer:['对了，最近稍微调了一下口味，来帮我试试，好的坏的都告诉我。','有什么意见评论区说，好的坏的我都看着。别光点赞，说点真话。','今天下雨，人少，蒸的不多。来的都是真爱，我记着呢。','下个视频你们想看什么？评论区告诉我。'],pattern:'抛问题→纠结过程→认命式结论→给台阶'},craft:{name:'匠心型',icon:'🔪',hook:['我店里的东西，超过四个小时我自己都不吃。','有人问我为什么每天只做晚市，不做中午？今天统一回答。','做了这么多年，有些规矩已经刻在骨子里了，改不了。','我今天就想让你们看看，一口好吃的背后，到底要花多少功夫。'],closer:['今天到了一批特别好的货，识货的人自然懂，早点来。','我每天都在店里，随时来随时验。觉得哪道菜可以更好，来告诉我。','不好吃，来找我。退钱。这句话我说了三年了，没有一个人来找过我。','不是吹牛，你吃一次就知道了。这行做了大半辈子，手底下的东西不会骗人。'],pattern:'品质红线→展示过程→讲代价→灵魂总结'}};
+const CT={founder:{label:'创始人故事'},story:{label:'小经历分享'},opinion:{label:'说观点'},pain:{label:'痛点极致化'},process:{label:'晒过程'},knowledge:{label:'教知识'},product:{label:'说产品'}};
+
+function $(id){return document.getElementById(id)}
+function pick(a){return a[Math.floor(Math.random()*a.length)]}
+function showToast(m,ms=2000){const t=$('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),ms)}
+function getBizName(){const s=$('bizType').value;return s==='custom'?($('bizTypeCustom').value||'餐饮店'):(s||'餐饮店')}
+function getCity(){return $('city').value||'本地'}
+function getPersona(){return $('persona').value||'regret'}
+function getContentType(){return $('contentType').value||'story'}
+function getDuration(){return parseInt($('duration').value)||60}
+function getExtra(){return $('extraDetails').value.trim()}
+function getCore(){return $('coreMessage').value.trim()}
+function getTags(){return $('tags').value.split(',').map(t=>t.trim()).filter(Boolean)}
+
+/* ═════════ SUPABASE DATA OPS ═════════ */
+async function dbGetPoints(uname){
+  const{data,error}=await sb.from('user_points').select('points').eq('username',uname).maybeSingle();
+  if(error||!data){await sb.from('user_points').insert({username:uname,points:DEFAULT_POINTS});return DEFAULT_POINTS}
+  return data.points;
+}
+async function dbSetPoints(uname,pts){
+  await sb.from('user_points').upsert({username:uname,points:pts,updated_at:new Date().toISOString()});
+}
+async function dbGetInviteCodes(){
+  const{data}=await sb.from('invite_codes').select('*').order('created_at',{ascending:false});
+  return data||[];
+}
+async function dbSaveInviteCode(c){await sb.from('invite_codes').insert(c)}
+async function dbUseInviteCode(code){
+  const{data}=await sb.from('invite_codes').select('*').eq('code',code).eq('used',false).maybeSingle();
+  if(!data)return null;
+  await sb.from('invite_codes').update({used:true,used_by:currentUser?currentUser.username:'unknown',used_at:new Date().toISOString()}).eq('code',code);
+  return data;
+}
+async function dbSaveScript(e){await sb.from('scripts').upsert({id:e.id,username:currentUser.username,script_data:e,created_at:e.createdAt})}
+async function dbLoadScripts(){
+  const{data}=await sb.from('scripts').select('*').eq('username',currentUser.username).order('created_at',{ascending:false});
+  return(data||[]).map(r=>r.script_data);
+}
+async function dbDeleteScript(id){await sb.from('scripts').delete().eq('id',id)}
+async function dbAdminVerify(u,p){
+  const{data}=await sb.from('admin_users').select('*').eq('username',u).eq('password',p).maybeSingle();
+  return !!data;
+}
+async function dbAdminCreate(u,p){
+  const exist=await sb.from('admin_users').select('*').maybeSingle();
+  if(exist.data&&exist.data.length>0)return false;
+  await sb.from('admin_users').insert({username:u,password:p});
+  return true;
+}
+
+/* ═════════ POINTS ═════════ */
+async function getUserPoints(){if(!currentUser)return Infinity;return await dbGetPoints(currentUser.username)}
+async function setUserPoints(pts){if(!currentUser)return;await dbSetPoints(currentUser.username,pts)}
+async function deductPoints(){
+  if(!currentUser)return true;
+  const pts=await getUserPoints();
+  if(pts<POINTS_PER_GEN){showToast('积分不足！剩余'+pts+'积分，每次生成需'+POINTS_PER_GEN+'积分');return false}
+  await setUserPoints(pts-POINTS_PER_GEN);updatePointsUI();return true;
+}
+async function updatePointsUI(){
+  if(!currentUser){$('pointsDisplay').style.display='none';$('pointsWarning').style.display='none';$('btnGenerate').disabled=true;$('btnGenerate').innerHTML='<span class="spinner" id="spinner"></span>🔒 请先登录后生成';return}
+  const pts=await getUserPoints();$('pointsDisplay').style.display='inline';$('pointsDisplay').textContent='⭐ '+pts;
+  if(pts<POINTS_PER_GEN){$('pointsWarning').style.display='block';$('pointsWarningNum').textContent=pts;$('btnGenerate').disabled=true}else{$('pointsWarning').style.display='none';$('btnGenerate').disabled=false;$('btnGenerate').innerHTML='<span class="spinner" id="spinner"></span>✨ 生成口播脚本'}
+}
+
+/* ═════════ INVITE CODES ═════════ */
+async function generateInviteCodes(){
+  const count=parseInt($('inviteCount').value)||5,pts=parseInt($('invitePoints').value)||600;
+  for(let i=0;i<count;i++){
+    const code='HBS-'+Date.now().toString(36).toUpperCase()+'-'+Math.random().toString(36).substr(2,5).toUpperCase();
+    await dbSaveInviteCode({code,points:pts,used:false,created_at:new Date().toISOString()});
+  }
+  renderInviteCodeList();showToast('✅ 已生成 '+count+' 个邀请码（每个赠送 '+pts+' 积分）');
+}
+async function renderInviteCodeList(){
+  const codes=await dbGetInviteCodes(),unused=codes.filter(c=>!c.used),used=codes.filter(c=>c.used);
+  $('inviteCodeList').innerHTML='<p style="margin-bottom:10px;color:var(--green);font-weight:600">未使用 ('+unused.length+')</p>'+unused.slice(-30).map(c=>`<div style="margin-bottom:6px;padding:6px;background:var(--green-bg);border-radius:6px"><code style="font-weight:700">${c.code}</code> <span style="color:var(--text2);font-size:0.7rem">赠送 ${c.points} 积分</span></div>`).join('')+'<p style="margin:14px 0 6px;color:var(--text3)">已使用 ('+used.length+')</p>'+used.slice(-10).map(c=>`<div style="margin-bottom:4px;color:var(--text3);font-size:0.7rem"><s>${c.code}</s> → ${c.used_by||'?'} (${c.used_at?new Date(c.used_at).toLocaleDateString('zh-CN'):''})</div>`).join('');
+}
+async function rechargeUserPoints(){
+  const u=$('rechargeUser').value.trim(),pts=parseInt($('rechargePoints').value)||0;
+  if(!u||pts<=0){showToast('请输入有效用户名和积分');return}
+  const cur=await dbGetPoints(u);await dbSetPoints(u,cur+pts);showToast('✅ 已为 '+u+' 充值 '+pts+' 积分（当前：'+(cur+pts)+'）');
+}
+
+/* ═════════ AUTH ═════════ */
+function handleAuthBtn(){if(currentUser){logout()}else{$('authModal').classList.add('active');$('authUsername').focus()}}
+function logout(){currentUser=null;updateAuthUI();showToast('已退出登录');localStorage.removeItem('hbs_last_user')}
+function closeAuth(){$('authModal').classList.remove('active')}
+function toggleAuthMode(){authMode=authMode==='login'?'register':'login';$('authModalTitle').textContent=authMode==='login'?'登录':'注册';$('authSubmitBtn').textContent=authMode==='login'?'登录':'注册';$('confirmPwGroup').style.display=authMode==='login'?'none':'block';$('inviteCodeGroup').style.display=authMode==='login'?'none':'block';$('authSwitch').innerHTML=authMode==='login'?'还没有账号？<a onclick="toggleAuthMode()">去注册</a>':'已有账号？<a onclick="toggleAuthMode()">去登录</a>'}
+async function doAuth(){
+  const u=$('authUsername').value.trim(),p=$('authPassword').value.trim();
+  if(!u||!p){showToast('请填写用户名和密码');return}
+  if(authMode==='register'){
+    const cp=$('authConfirmPw').value.trim(),ic=$('authInviteCode').value.trim();
+    if(p!==cp){showToast('两次密码不一致');return}
+    if(!ic){showToast('请输入邀请码');return}
+    if(localStorage.getItem('hbs_user_'+u)){showToast('用户名已存在');return}
+    const invite=await dbUseInviteCode(ic);
+    if(!invite){showToast('邀请码无效或已被使用');return}
+    const pts=invite.points||DEFAULT_POINTS;
+    localStorage.setItem('hbs_user_'+u,JSON.stringify({username:u,password:p,createdAt:new Date().toISOString(),points:pts}));
+    await dbSetPoints(u,pts);
+    showToast('注册成功！获得 '+pts+' 积分，请登录');toggleAuthMode();return;
+  }
+  const d=JSON.parse(localStorage.getItem('hbs_user_'+u)||'null');
+  if(!d||d.password!==p){showToast('用户名或密码错误');return}
+  currentUser={username:u,createdAt:d.createdAt};localStorage.setItem('hbs_last_user',u);
+  await updateAuthUI();closeAuth();await renderLibrary();showToast('欢迎回来，'+u+'！剩余 '+(await getUserPoints())+' 积分');
+}
+async function updateAuthUI(){
+  if(currentUser){$('usernameDisplay').textContent=currentUser.username;$('authBtn').textContent='退出';$('libraryLoginHint').textContent='';}else{$('usernameDisplay').textContent='未登录';$('authBtn').textContent='登录';$('libraryLoginHint').textContent='登录后可保存和管理所有生成的脚本';}
+  await updatePointsUI();
+}
+
+/* ═════════ ADMIN AUTH ═════════ */
+async function checkAdminAuth(){
+  if(isAdmin)return true;
+  const creds=JSON.parse(localStorage.getItem('hbs_admin_creds')||'null');
+  if(!creds){
+    $('adminModalTitle').textContent='🔑 首次设置管理员账号';
+    $('adminSetupMode').style.display='block';
+    $('adminModal').classList.add('active');$('adminUsername').focus();return false;
+  }
+  $('adminModalTitle').textContent='🔐 管理员登录';
+  $('adminSetupMode').style.display='none';
+  $('adminModal').classList.add('active');$('adminUsername').value='';$('adminPassword').value='';$('adminUsername').focus();return false;
+}
+async function doAdminAuth(){
+  const u=$('adminUsername').value.trim(),p=$('adminPassword').value.trim();
+  if(!u||!p){showToast('请填写用户名和密码');return}
+  const creds=JSON.parse(localStorage.getItem('hbs_admin_creds')||'null');
+  if(!creds){
+    const cp=$('adminConfirmPw').value.trim();
+    if(p!==cp){showToast('两次密码不一致');return}
+    localStorage.setItem('hbs_admin_creds',JSON.stringify({username:u,password:p}));
+    isAdmin=true;$('adminModal').classList.remove('active');switchPage('admin');showToast('管理员账号已创建！');return;
+  }
+  if(u===creds.username&&p===creds.password){isAdmin=true;$('adminModal').classList.remove('active');switchPage('admin');showToast('管理员登录成功')}
+  else showToast('管理员用户名或密码错误');
+}
+
+/* ═════════ PAGES ═════════ */
+async function switchPage(page){
+  if(page==='admin'&&!isAdmin){$('adminUsername').value='';$('adminPassword').value='';await checkAdminAuth();if(!isAdmin)return}
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));$('page-'+page).classList.add('active');
+  document.querySelectorAll('.nav-links a,.nav-links button').forEach(l=>l.classList.remove('active'));
+  const link=document.querySelector('.nav-links a[href="#'+page+'"]')||document.querySelector('.nav-links button[onclick*="'+page+'"]');
+  if(link)link.classList.add('active');
+  if(page==='library')await renderLibrary();
+  if(page==='stats')renderStats();
+  if(page==='profile')renderProfile();
+  if(page==='templates')renderTemplatesPage();
+  if(page==='admin')await renderInviteCodeList();
+}
+
+function renderTemplatesPage(){
+  $('templateGrid').innerHTML=[{p:'regret',t:'后悔型·凡尔赛之王',d:'先抛"我后悔了"制造悬念，再用真实细节反转成凡尔赛。适合有故事的老店。',h:'"我最后悔的事，就是开了这家店"'},{p:'gang',t:'杠精型·正面硬刚',d:'直接挑战嫌贵/嫌慢/嫌少的顾客，用供应链细节怼回去。评论区必炸。',h:'"嫌贵就不要来吃"'},{p:'honest',t:'实在型·听劝人设',d:'把顾客挑的毛病摆上台面，纠结要不要改——最终坚持自我。最吸粉。',h:'"你们天天说我家的太辣了……"'},{p:'craft',t:'匠心型·品质偏执',d:'用不可触碰的品质红线立人设。数字越具体杀伤力越强。',h:'"超过四个小时，我自己都不吃"'}].map(c=>`<div class="library-card" onclick="loadTemplate('${c.p}')"><h3 style="font-size:0.95rem;margin-bottom:6px">${PERSONAS[c.p].icon} ${c.t}</h3><p style="font-size:0.78rem;color:var(--text2);margin-bottom:8px">${c.d}</p><span style="font-size:0.75rem;color:var(--accent);font-weight:500;background:#FFF1F0;padding:4px 10px;border-radius:6px">🔥 ${c.h}</span></div>`).join('');
+}
+function loadTemplate(pk){$('persona').value=pk;document.querySelectorAll('.persona-card').forEach(c=>c.classList.remove('active'));const c=document.querySelector('.persona-card[data-persona="'+pk+'"]');if(c)c.classList.add('active');switchPage('generator');setTimeout(()=>$('generator').scrollIntoView({behavior:'smooth'}),100);showToast('已加载「'+PERSONAS[pk].name+'」模板')}
+
+/* ═════════ SCRIPT ENGINE ═════════ */
+const nl='\n\n';
+function buildMiddle(pk,biz,city,extra,core){const d=extra||biz+'开了三年，老板每天凌晨起来备料',cm=core||'',bs=biz.replace('馆','').replace('店',''),cs=city||'本地';
+  const T={regret:{part1:'说起这个店，真是又爱又恨。\n'+d+'\n\n当初把全部身家投进来的时候，我老婆'+pick(['一个月没跟我说话','差点跟我离婚','说我是疯了'])+'。身边朋友也都劝我："你安安稳稳上个班不好吗？非得折腾。"\n\n头三个月是最难熬的。我记得有一天，外面下着大雨，店里就坐了一桌客人。我在后厨炒菜，炒着炒着眼泪就下来了——不是洋葱熏的，是真的扛不住了。心想：是不是我真的不适合干这行？\n\n也不怕你们笑话，那时候每天晚上打烊以后，我一个人坐在门口台阶上发呆，看着马路对面那家快餐店人来人往的。那感觉，就像你拼了命在做一件事，但没人看得见。',
+  part2:'后来转机出现在一个特别普通的日子。\n\n来了个'+pick(['大姐','大叔','小伙子','姑娘'])+'，一个人点了好几道菜，吃完以后专门跑到后厨来，跟我说了一句话："老板，我在'+cs+'住了这么多年，这是第一次吃到跟我妈做的一个味道。"\n\n就这一句话，我记到现在。\n\n从那以后我明白了：不是没人爱吃这一口，是知道的人太少了。后来也不知道怎么就慢慢火了。现在周末要排队，有时候老顾客等久了直接冲后厨喊："老'+pick(['板','李','王','张'])+'你快点儿，我饿死了！"我就回一句："当初没人的时候你咋不来呢？"\n\n说实话，开这个店让我明白了——'+pick(['有些事急不来','火候到了自然会熟','好东西不怕没人识货'])+'。你用心做，对得起自己的良心，剩下的交给时间。像我师傅以前说的：做菜跟做人一样，火候到了，味自然就对了。'+(core?nl+cm:'')},
+  gang:{part1:'我今天就把话放在这儿——'+pick(['嫌贵真的不要来','觉得不值你随时来找我','你要是能在这附近找到比我用料好的，这顿饭我请'])+'。\n\n我就问一句，你们在外面吃顿饭，到底是吃味道还是吃便宜？\n\n（停顿，看着镜头）\n\n有人说我家一份'+pick(['回锅肉','水煮鱼','毛血旺','辣子鸡'])+'卖'+pick(['68','78','88'])+'太贵了。对，你说得对，菜市场猪肉才十五一斤。那我问你——菜市场的肉你买回去自己炒，炒得出我家这个味道吗？炒不出。为什么？因为我用的二刀肉，一头猪就出那么两斤。我用的豆瓣酱是'+pick(['郫县老厂子定制的','四川乐山一个老师傅手工做的','我师傅传下来的配方'])+'，'+pick(['三年陈酿','五年老酱','外面买都买不到'])+'。\n\n'+(d.includes('年')?'我再给你们说个细节——'+d.split('，')[0]+'。':'这店开了这几年，'+d.split('，')[0]+'。')+'\n\n我今天就把后厨给你们看——',
+  part2:'（镜头切后厨，快速展示食材和操作）\n\n看到没有？这就是我每天用的东西。我不买现成的料包，不买冷冻的半成品，每一样东西都是我自己挑、自己做的。你要量大管饱的快餐，出门到处都是，十五块钱一份盖浇饭，吃完了也不知道自己吃了什么。\n\n但是你要吃一口真正用心的'+bs+'，'+pick(['这附近找不出几家','你花三个小时在家也做不出这个味道','你吃一次就知道了'])+'。\n\n我今天说这些不是为了怼谁——我就是想说，餐饮这行要想做好，真的没有捷径。你糊弄顾客，顾客一口就吃出来了。'+(core?cm+'。':'一分钱一分货，吃得出来的东西骗不了人。')+'\n\n所以'+pick(['嫌贵的真的别来','但你要是真想吃一口好的','你要是懂吃的话'])+'——'+pick(['今天我备的货不多，先到先得','晚上来，我都在','随时来验，觉得不值退你钱'])+'。'},
+  honest:{part1:'出大事了。\n\n你们天天在评论区说我家'+pick(['太辣了','太麻了','太油了','太重口了','太咸了'])+'。我看了一条又一条，说实话心里挺不是滋味的。毕竟自己做的东西被人说三道四，谁心里能好受？\n\n所以我真的回去想了很久——到底要不要改配方？\n\n我跟你们说实话，我试了。'+pick(['试了三次','调了整整一个月','改了五个版本'])+'。\n\n第一次，我把'+pick(['辣椒减了三分之一','花椒少放了一半','油少放了很多'])+'。结果呢？老顾客来吃，吃了一口就放下筷子，说："老板，今天的味道不对。"\n\n第二次，我又调了一点。有个'+pick(['熟客','经常来的阿姨','吃了三年的老哥'])+'直接跑到后厨来问我："'+pick(['你是不是换师傅了','你是不是不想干了','你是不是觉得我们这些老顾客不重要了'])+'？"\n\n当时我那个心啊，又感动又愧疚。赶紧换回来。'+(d.includes('年')?nl+'说实话，'+d.split('，')[0]+'的那天，我想了一整晚。':''),
+  part2:'所以今天，我郑重宣布——\n\n默认配方，我不改了。就是这个味。\n\n我知道不是所有人都能接受这个味道。没关系，你要是觉得'+pick(['太辣','太麻','太重口','太刺激'])+'，你来的时候跟阿姨说一声"'+pick(['少辣','少麻','清淡一点','微微辣'])+'"，我们给你备注上，单独给你做。\n\n但是默认的锅底/调味，就是你第一次来吃到的那种——那个味道，是我研究了'+pick(['好几年','十几年','大半辈子'])+'才定下来的，改不了，也不想改。\n\n'+(core?cm+nl:'')+'最后说一句——如果你之前觉得我家太'+pick(['辣','麻','咸','重口'])+'就没再来了，我邀请你再来试一次。你提前说，我帮你调。但是那种一吃就记住的味道，我不想弄丢了。\n\n'+pick(['理解万岁。','谢谢理解。','做餐饮真的不容易，但我会一直做下去。'])},
+  craft:{part1:pick(['你们看这个','我给你们演示一下','今天带你们看看我的日常'])+'——\n\n'+(d.includes('凌晨')||d.includes('早上')||d.includes('起来')?d:'每天早上'+pick(['四点半闹钟响','五点天没亮就出门','天还没亮就起来了'])+'，第一件事就是去菜市场。')+'\n\n我跟你们说，去晚了真不行。'+pick(['好的前腿肉就那么几块','最新鲜的鱼就那么几条','好的配料就那么一点'])+'，你去晚了就被别人挑走了。所以'+pick(['三年了','这几年','开店以来'])+'，我没有一天睡过懒觉。\n\n有人问我："你为什么不提前一天买好放冰箱？省得天天跑。"\n\n我说你不懂——'+pick(['新鲜的肉和放过冰箱的肉，一下锅就知道','现杀的鱼和冰鲜的鱼，吃起来是两个世界','有些东西差了那半天，味道就差了一大截'])+'。你让我用冰过的肉做给客人吃？我做不到。不是矫情，是过不了自己那一关。',
+  part2:'做了'+pick(['小二十年','十七八年','十几年'])+'的'+bs+'，有些规矩已经刻在骨子里了。\n\n'+pick(['不是当天的肉我宁可不卖，少赚一天钱也比砸了招牌强。','超过四个小时的东西我自己都不吃，更不可能端给客人。','每一锅底料都是我自己炒的，从来不买现成的。'])+'\n\n我跟我徒弟说：你在这个厨房里，可以不快，可以手生，但你不能糊弄。因为外面坐着的每一个人，都是花了钱、带着期待来的。你糊弄他一次，他可能这辈子都不会再来了。\n\n'+(core?cm+'。':'手艺人的底线，比什么都重要。')+'\n\n'+pick(['今天到了一批特别好的货，识货的早点来。','我每天都在店里，随时来随时验。','你觉得我哪道菜可以做得更好，来告诉我，我改。'])}};
+  return T[pk]||T.regret;}
+
+function buildScript(pk){const p=PERSONAS[pk],biz=getBizName(),city=getCity(),ct=CT[getContentType()],dur=getDuration(),extra=getExtra(),core=getCore(),hook=pick(p.hook),mid=buildMiddle(pk,biz,city,extra,core),closer=pick(p.closer),ts=dur,hs=Math.max(3,Math.round(ts*0.05)),ms=Math.round(ts*0.75);
+  const sc='【0-'+hs+'秒 钩子】\n'+hook+'\n\n【'+(hs)+'-'+(hs+Math.round(ms*0.4))+'秒 展开】\n'+mid.part1+'\n\n【'+(hs+Math.round(ms*0.4))+'-'+(hs+ms)+'秒 转折/升华】\n'+mid.part2+'\n\n【'+(hs+ms)+'-'+ts+'秒 收尾】\n'+closer;
+  const broll=[{time:'0-'+hs+'s',desc:'老板直视镜头，表情认真/疲惫/倔强',tip:'特写，自然光，不要美颜过度'},{time:hs+'-'+(hs+Math.round(ms*0.4))+'s',desc:pk==='craft'?'慢镜头：凌晨市场、挑选食材、切菜特写':'空镜：店内环境、后厨背影、窗外',tip:pk==='craft'?'暖色调，强调质感':'手持轻微晃动，降低饱和度'},{time:(hs+Math.round(ms*0.4))+'-'+(hs+ms)+'s',desc:'顾客用餐镜头、老板和客人互动',tip:'抓拍真实反应，不要摆拍'},{time:(hs+ms)+'-'+ts+'s',desc:'老板转身回后厨/低头干活/笑一下',tip:'自然收尾'}];
+  return{script:sc,meta:biz+' · '+p.name+' · '+ct.label+' · '+ts+'秒 · '+city,persona:p,analysis:{人设:p.name,类型:ct.label,锚点:pick(['共鸣认同','价值冲突','生存焦虑','情绪自证','群体对比']),开篇:p.hook[0].substring(0,30)+'...',情绪:pick(['好奇→感动→认同','愤怒→佩服→转发','焦虑→释然→点赞']),结构:p.pattern,去AI:'句子碎、不编对话、不收广告腔'},broll};}
+
+/* ═════════ GENERATE ═════════ */
+async function generateScript(){
+  if(!currentUser){showToast('请先登录后再生成文案');$('authModal').classList.add('active');return}
+  const pk=getPersona();if(!pk){showToast('请先选择人设风格');return}
+  if(!await deductPoints())return;
+  const s=$('spinner'),b=$('btnGenerate');s.classList.add('active');b.disabled=true;
+  setTimeout(()=>{const sc=buildScript(pk);displayResult(sc);s.classList.remove('active');b.disabled=false;updatePointsUI();},500);
+}
+async function batchGenerate(){
+  if(!currentUser){showToast('请先登录后再生成文案');$('authModal').classList.add('active');return}
+  const pk=getPersona();if(!pk){showToast('请先选择人设风格');return}
+  const needed=POINTS_PER_GEN*3,pts=await getUserPoints();
+  if(pts<needed){showToast('积分不足！批量生成需'+needed+'积分，当前剩余'+pts+'积分');return}
+  await setUserPoints(pts-needed);updatePointsUI();
+  batchResults=[];$('batchPanel').style.display='block';$('batchGrid').innerHTML='<p style="text-align:center;color:var(--text2);grid-column:1/-1">⚡ 正在生成 3 个版本...</p>';
+  for(let i=0;i<3;i++)setTimeout(()=>{const sc=buildScript(pk);batchResults.push(sc);renderBatchResults();if(i===0)displayResult(sc)},i*350);
+}
+function renderBatchResults(){
+  $('batchGrid').innerHTML=batchResults.map((sc,i)=>`<div class="batch-card"><div class="bc-header">📝 版本 ${i+1} <span style="font-weight:400;color:var(--text2)">${sc.meta.split('·').slice(0,2).join('·')}</span></div><div class="bc-body">${sc.script}</div><div class="bc-actions"><button class="btn-action save" onclick="selectBatch(${i})">💾 保存这版</button><button class="btn-action" onclick="viewBatch(${i})">📖 查看详情</button><button class="btn-action" onclick="copyBatch(${i})">📋 复制</button></div></div>`).join('');
+  $('batchPanel').scrollIntoView({behavior:'smooth'});
+}
+function selectBatch(i){if(!currentUser){showToast('请先登录');$('authModal').classList.add('active');return}currentScript=batchResults[i];saveToLibrary();showToast('✅ 版本'+(i+1)+'已保存到云端')}
+function viewBatch(i){currentScript=batchResults[i];displayResult(currentScript);$('resultPanel').scrollIntoView({behavior:'smooth'})}
+function copyBatch(i){navigator.clipboard.writeText(batchResults[i].script).then(()=>showToast('✅ 已复制'))}
+
+function displayResult(sc){currentScript=sc;$('scriptMeta').textContent=sc.meta;$('scriptContent').textContent=sc.script;$('scriptContent').setAttribute('contenteditable','false');isEditing=false;$('editBtnText').textContent='编辑';
+  let ah='<div class="analysis-grid">';for(const[k,v]of Object.entries(sc.analysis))ah+='<div class="analysis-item"><div class="label">'+k+'</div><div class="value">'+v+'</div></div>';ah+='</div>';$('scriptAnalysis').innerHTML=ah;
+  $('brollSection').innerHTML='<h4>🎥 B-roll 拍摄建议</h4><div class="broll-grid">'+sc.broll.map(s=>'<div class="broll-item"><strong>🕐 '+s.time+'</strong>'+s.desc+'<br><small>💡 '+s.tip+'</small></div>').join('')+'</div>';
+  $('resultPanel').classList.add('visible');$('resultPanel').scrollIntoView({behavior:'smooth'});}
+function toggleEdit(){if(!currentScript)return;isEditing=!isEditing;$('scriptContent').setAttribute('contenteditable',isEditing?'true':'false');$('editBtnText').textContent=isEditing?'保存编辑':'编辑';if(!isEditing){currentScript.script=$('scriptContent').textContent;if(currentUser)saveToLibrary()}}
+async function saveToLibrary(){if(!currentUser){showToast('请先登录后再保存');$('authModal').classList.add('active');return}if(!currentScript)return;if(isEditing)currentScript.script=$('scriptContent').textContent;
+  const e={id:Date.now().toString(36)+Math.random().toString(36).substr(2,5),script:currentScript.script,meta:currentScript.meta,analysis:currentScript.analysis,broll:currentScript.broll,persona:getPersona(),biz:getBizName(),city:getCity(),contentType:getContentType(),duration:getDuration(),tags:getTags(),createdAt:new Date().toISOString()};
+  await dbSaveScript(e);
+  savedScripts.unshift(e);showToast('✅ 已保存到云端');
+}
+function regenerateScript(){generateScript()}
+function copyScript(){navigator.clipboard.writeText($('scriptContent').textContent).then(()=>showToast('✅ 已复制'))}
+function downloadScript(){const t=$('scriptContent').textContent,m=$('scriptMeta').textContent,b=new Blob([m+'\n\n'+t],{type:'text/plain;charset=utf-8'}),u=URL.createObjectURL(b),a=document.createElement('a');a.href=u;a.download=m.replace(/[\/:]/g,'-')+'.txt';a.click();URL.revokeObjectURL(u)}
+
+/* ═════════ LIBRARY ═════════ */
+async function renderLibrary(){
+  if(!currentUser){$('libraryGrid').innerHTML='';$('libraryEmpty').style.display='block';return}
+  savedScripts=await dbLoadScripts();
+  const fp=$('filterPersona').value,fb=$('filterBiz').value,fs=$('filterSearch').value.toLowerCase();let f=savedScripts;
+  if(fp!=='all')f=f.filter(s=>s.persona===fp);if(fb!=='all')f=f.filter(s=>s.biz===fb);if(fs)f=f.filter(s=>s.script.toLowerCase().includes(fs)||s.meta.toLowerCase().includes(fs)||(s.tags||[]).some(t=>t.toLowerCase().includes(fs)));
+  if(!f.length){$('libraryGrid').innerHTML='';$('libraryEmpty').style.display='block';updateBizFilter();return}
+  $('libraryEmpty').style.display='none';$('libraryGrid').innerHTML=f.map(s=>{const p=PERSONAS[s.persona]||{icon:'?'},pv=s.script.split('\n').slice(1,4).join(' ').substring(0,100),dt=new Date(s.createdAt).toLocaleDateString('zh-CN');
+    return'<div class="library-card" onclick="loadFromLibrary(\''+s.id+'\')"><div class="lc-header"><span class="lc-meta">'+p.icon+' '+s.meta+'</span><span class="lc-date">'+dt+'</span></div><div class="lc-preview">'+pv+'...</div><div class="lc-tags">'+(s.tags||[]).map(t=>'<span class="lc-tag">#'+t+'</span>').join('')+'</div><div class="lc-tags" style="margin-top:8px" onclick="event.stopPropagation()"><button class="btn-action" onclick="loadFromLibrary(\''+s.id+'\')">📖</button><button class="btn-action danger" onclick="deleteScript(\''+s.id+'\')">🗑️</button></div></div>';}).join('');updateBizFilter();}
+function updateBizFilter(){const f=$('filterBiz'),cv=f.value,bizes=[...new Set(savedScripts.map(s=>s.biz))];f.innerHTML='<option value="all">全部商家</option>'+bizes.map(b=>'<option value="'+b+'">'+b+'</option>').join('');f.value=cv}
+function loadFromLibrary(id){const s=savedScripts.find(s=>s.id===id);if(!s)return;switchPage('generator');$('bizType').value=s.biz;$('city').value=s.city;$('persona').value=s.persona;$('contentType').value=s.contentType;$('duration').value=s.duration;$('extraDetails').value='';$('coreMessage').value='';$('tags').value=(s.tags||[]).join(',');document.querySelectorAll('.persona-card').forEach(c=>{c.classList.remove('active');if(c.dataset.persona===s.persona)c.classList.add('active')});displayResult({script:s.script,meta:s.meta,analysis:s.analysis,broll:s.broll||[],persona:PERSONAS[s.persona]});showToast('已加载文案')}
+async function deleteScript(id){if(!confirm('确定删除？'))return;await dbDeleteScript(id);savedScripts=savedScripts.filter(s=>s.id!==id);renderLibrary();showToast('已删除')}
+
+/* ═════════ STATS ═════════ */
+async function renderStats(){
+  if(!currentUser){$('statsRow').innerHTML='<p style="text-align:center;color:var(--text3)">请先登录</p>';return}
+  savedScripts=await dbLoadScripts();const pts=await getUserPoints();
+  const ss=savedScripts,total=ss.length,personas={};ss.forEach(s=>{personas[s.persona]=(personas[s.persona]||0)+1});const tp=Object.entries(personas).sort((a,b)=>b[1]-a[1])[0],tm=ss.filter(s=>{const d=new Date(s.createdAt),n=new Date();return d.getMonth()===n.getMonth()&&d.getFullYear()===n.getFullYear()}).length;
+  $('statsRow').innerHTML='<div class="stat-card"><div class="stat-num">'+total+'</div><div class="stat-label">总保存数</div></div><div class="stat-card"><div class="stat-num">'+tm+'</div><div class="stat-label">本月保存</div></div><div class="stat-card"><div class="stat-num">'+pts+'</div><div class="stat-label">剩余积分</div></div><div class="stat-card"><div class="stat-num">'+(tp?PERSONAS[tp[0]].icon+' '+PERSONAS[tp[0]].name:'-')+'</div><div class="stat-label">最爱人设</div></div>';
+}
+
+/* ═════════ PROFILE ═════════ */
+async function renderProfile(){if(!currentUser){$('profileName').value='未登录';$('profileDate').value='';$('profilePoints').value='';$('profileCount').value='';return}savedScripts=await dbLoadScripts();$('profileName').value=currentUser.username;$('profileDate').value=new Date(currentUser.createdAt).toLocaleDateString('zh-CN');$('profilePoints').value=(await getUserPoints())+' 积分';$('profileCount').value=savedScripts.length+' 条'}
+async function exportAllData(){if(!currentUser){showToast('请先登录');return}savedScripts=await dbLoadScripts();const d={user:currentUser,scripts:savedScripts,exportedAt:new Date().toISOString()},b=new Blob([JSON.stringify(d,null,2)],{type:'application/json'}),u=URL.createObjectURL(b),a=document.createElement('a');a.href=u;a.download='爆款文案AI_'+currentUser.username+'_'+new Date().toISOString().split('T')[0]+'.json';a.click();URL.revokeObjectURL(u);showToast('📦 已导出')}
+async function clearAllData(){
+  if(!confirm('确定清除云端所有数据？不可恢复！'))return;
+  const scripts=await dbLoadScripts();for(const s of scripts)await dbDeleteScript(s.id);
+  savedScripts=[];renderLibrary();showToast('已清除云端数据')
+}
+
+/* ═════════ THEME ═════════ */
+function toggleTheme(){const h=document.documentElement,c=h.getAttribute('data-theme'),n=c==='dark'?'light':'dark';h.setAttribute('data-theme',n);localStorage.setItem('hbs_theme',n)}
+
+/* ═════════ INIT ═════════ */
+document.querySelectorAll('.persona-card').forEach(card=>{card.addEventListener('click',()=>{document.querySelectorAll('.persona-card').forEach(c=>c.classList.remove('active'));card.classList.add('active');$('persona').value=card.dataset.persona})});
+$('bizType').addEventListener('change',function(){const c=$('bizTypeCustom');c.style.display=this.value==='custom'?'block':'none';if(this.value!=='custom')c.value=''});
+window.addEventListener('hashchange',()=>{const h=location.hash.replace('#','');if(h==='admin')switchPage('admin')});
+(async function init(){
+  const t=localStorage.getItem('hbs_theme');if(t)document.documentElement.setAttribute('data-theme',t);
+  const lu=localStorage.getItem('hbs_last_user');
+  if(lu){const d=JSON.parse(localStorage.getItem('hbs_user_'+lu)||'null');if(d)currentUser={username:lu,createdAt:d.createdAt}}
+  await updateAuthUI();renderTemplatesPage();
+  if(location.hash==='#admin')switchPage('admin');
+})();
+</script>
+</body>
+</html>
