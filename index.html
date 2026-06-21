@@ -432,6 +432,14 @@ async function checkAdminAuth(){
   if(isAdmin)return true;
   const creds=JSON.parse(localStorage.getItem('hbs_admin_creds')||'null');
   if(!creds){
+    // Try Supabase
+    const{data}=await sb.from('admin_users').select('*').limit(1).maybeSingle();
+    if(data){
+      localStorage.setItem('hbs_admin_creds',JSON.stringify({username:data.username,password:data.password}));
+      $('adminModalTitle').textContent='🔐 管理员登录';
+      $('adminSetupMode').style.display='none';
+      $('adminModal').classList.add('active');$('adminUsername').value='';$('adminPassword').value='';$('adminUsername').focus();return false;
+    }
     $('adminModalTitle').textContent='🔑 首次设置管理员账号';
     $('adminSetupMode').style.display='block';
     $('adminModal').classList.add('active');$('adminUsername').focus();return false;
@@ -445,13 +453,21 @@ async function doAdminAuth(){
   if(!u||!p){showToast('请填写用户名和密码');return}
   const creds=JSON.parse(localStorage.getItem('hbs_admin_creds')||'null');
   if(!creds){
+    // First time - check Supabase too
+    const{data}=await sb.from('admin_users').select('*').limit(1).maybeSingle();
+    if(data){
+      if(u===data.username&&p===data.password){localStorage.setItem('hbs_admin_creds',JSON.stringify({username:u,password:p}));isAdmin=true;$('adminModal').classList.remove('active');switchPage('admin');showToast('管理员登录成功');return}
+      else{showToast('管理员用户名或密码错误');return}
+    }
     const cp=$('adminConfirmPw').value.trim();
     if(p!==cp){showToast('两次密码不一致');return}
     localStorage.setItem('hbs_admin_creds',JSON.stringify({username:u,password:p}));
-    isAdmin=true;$('adminModal').classList.remove('active');switchPage('admin');showToast('管理员账号已创建！');return;
+    await sb.from('admin_users').delete().neq('username','__none__');
+    await sb.from('admin_users').insert({username:u,password:p,created_at:new Date().toISOString()});
+    isAdmin=true;$('adminModal').classList.remove('active');switchPage('admin');showToast('管理员账号已创建！云端同步成功');return;
   }
   if(u===creds.username&&p===creds.password){isAdmin=true;$('adminModal').classList.remove('active');switchPage('admin');showToast('管理员登录成功')}
-  else showToast('管理员用户名或密码错误');
+  else{const{data}=await sb.from('admin_users').select('*').eq('username',u).eq('password',p).maybeSingle();if(data){localStorage.setItem('hbs_admin_creds',JSON.stringify({username:u,password:p}));isAdmin=true;$('adminModal').classList.remove('active');switchPage('admin');showToast('管理员登录成功（从云端恢复）')}else showToast('管理员用户名或密码错误')}
 }
 
 /* ═════════ PAGES ═════════ */
