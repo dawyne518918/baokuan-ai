@@ -188,10 +188,9 @@ body{background:var(--bg);font-family:'Inter',sans-serif;color:var(--text);line-
 <div class="form-panel" style="max-width:600px;margin:0 auto 24px"><h3>🤖 DEEPSEEK API KEY</h3><div class="form-group"><input type="password" id="apiKeyInput" placeholder="sk-..."></div><p style="font-size:.7rem;color:var(--text2);margin:4px 0">platform.deepseek.com → API Keys</p><div class="btn-row"><button class="btn-generate" onclick="saveApiKey()">💾 保存</button></div></div>
 <div class="form-panel" style="max-width:600px;margin:0 auto 24px"><h3>生成邀请码</h3><div class="form-grid"><div class="form-group"><label>数量</label><select id="inviteCount"><option value="5" selected>5个</option><option value="10">10个</option><option value="20">20个</option></select></div><div class="form-group"><label>积分</label><input type="number" id="invitePoints" value="600"></div></div><div class="btn-row"><button class="btn-generate" onclick="genCodes()">🎫 生成</button></div></div>
 <div class="form-panel" style="max-width:600px;margin:0 auto 24px"><h3>充值积分</h3><div class="form-grid"><div class="form-group"><label>用户名</label><input type="text" id="rechargeUser"></div><div class="form-group"><label>积分</label><input type="number" id="rechargePoints" value="100"></div></div><div class="btn-row"><button class="btn-generate" onclick="recharge()">💰 充值</button></div></div>
-<div class="form-panel" style="max-width:600px;margin:0 auto"><h3>邀请码列表</h3><div id="inviteCodeList">加载中...</div></div>
-<div class="form-panel" style="max-width:600px;margin:0 auto;margin-top:24px"><h3>👥 用户管理</h3><div id="userList" style="max-height:500px;overflow-y:auto">加载中...</div></div></div></div>
+<div class="form-panel" style="max-width:600px;margin:0 auto"><h3>邀请码列表</h3><div id="inviteCodeList">加载中...</div></div></div></div>
 
-<div class="modal-overlay" id="authModal"><div class="modal"><h2 id="authModalTitle">登录</h2><div class="form-group"><label>用户名</label><input type="text" id="authUsername"></div><div class="form-group"><label>密码</label><input type="password" id="authPassword"></div><div class="form-group" id="confirmPwGroup" style="display:none"><label>确认密码</label><input type="password" id="authConfirmPw"></div><div class="form-group" id="inviteCodeGroup" style="display:none"><label>邀请码</label><input type="text" id="authInviteCode"></div><div class="btn-row"><button class="btn-generate" onclick="doAuth()">登录</button></div><div class="modal-switch"><a onclick="toggleAuthMode()" id="authSwitchText">去注册</a></div><div class="modal-switch"><a onclick="closeAuth()" style="color:var(--text3)">取消</a></div><div class="modal-switch" style="margin-top:0"><a onclick="showToast('请联系管理员重置密码',4000)" style="color:var(--text3);font-size:.65rem;cursor:pointer">忘记密码？联系管理员</a></div></div></div>
+<div class="modal-overlay" id="authModal"><div class="modal"><h2 id="authModalTitle">登录</h2><div class="form-group"><label>用户名</label><input type="text" id="authUsername"></div><div class="form-group"><label>密码</label><input type="password" id="authPassword"></div><div class="form-group" id="confirmPwGroup" style="display:none"><label>确认密码</label><input type="password" id="authConfirmPw"></div><div class="form-group" id="inviteCodeGroup" style="display:none"><label>邀请码</label><input type="text" id="authInviteCode"></div><div class="btn-row"><button class="btn-generate" onclick="doAuth()">登录</button></div><div class="modal-switch"><a onclick="toggleAuthMode()" id="authSwitchText">去注册</a></div><div class="modal-switch"><a onclick="closeAuth()" style="color:var(--text3)">取消</a></div></div></div>
 <div class="modal-overlay" id="adminModal"><div class="modal"><h2 id="adminModalTitle">管理员登录</h2><div class="form-group"><label>用户名</label><input type="text" id="adminUsername"></div><div class="form-group"><label>密码</label><input type="password" id="adminPassword"></div><div class="form-group" id="adminSetupMode" style="display:none"><label>确认密码</label><input type="password" id="adminConfirmPw"></div><div class="btn-row"><button class="btn-generate" onclick="doAdminAuth()">登录</button></div><div class="modal-switch"><a onclick="$('adminModal').classList.remove('active')" style="color:var(--text3);cursor:pointer">取消</a></div></div></div>
 <div class="toast" id="toast"></div>
 
@@ -243,26 +242,6 @@ async function updatePointsUI(){
 
 async function genCodes(){const n=parseInt($('inviteCount').value)||5,p=parseInt($('invitePoints').value)||600;for(let i=0;i<n;i++){const c='HBS-'+Date.now().toString(36).toUpperCase()+'-'+Math.random().toString(36).substr(2,5).toUpperCase();await I('invite_codes',{code:c,points:p,used:false,created_at:new Date().toISOString()})}renderCodeList();showToast('已生成 '+n+' 个码')}
 async function renderCodeList(){const c=await Q('invite_codes','order=created_at.desc'),u=c.filter(x=>!x.used),s=c.filter(x=>x.used);$('inviteCodeList').innerHTML='<p style="color:var(--green);font-weight:600">未使用 ('+u.length+')</p>'+u.slice(-30).map(x=>'<div style="margin:4px 0;padding:4px;background:var(--green-bg);border-radius:4px"><code>'+x.code+'</code> '+x.points+'积分</div>').join('')+'<p style="margin-top:10px;color:var(--text3)">已使用 ('+s.length+')</p>'}
-async function renderUserList(){
-  var d=await Q("user_points","order=created_at.desc");
-  if(!d||!d.length){$("userList").innerHTML="<p>暂无用户</p>";return}
-  var rows=d.map(function(u){return "<tr><td><b>"+u.username+"</b></td><td>"+u.points+"</td><td>"+(u.created_at?new Date(u.created_at).toLocaleDateString("zh-CN"):"-")+"</td><td><button class=\"btn-action\" onclick=\"editPoints('"+u.username+"',"+u.points+")\">✏️</button> <button class=\"btn-action\" onclick=\"resetPwd('"+u.username+"')\">🔑</button></td></tr>"}).join("");
-  $("userList").innerHTML="<table style=\"width:100%;font-size:.75rem\">"+rows+"</table>";
-}
-async function resetPwd(u){
-  if(!confirm("重置 "+u+" 的密码?"))return;
-  var np=prompt("新密码","123456");if(!np)return;
-  await U("user_points","username=eq."+encodeURIComponent(u),{password:np,updated_at:new Date().toISOString()});
-  showToast(u+" 密码已重置为 "+np);
-}
-async function editPoints(u,cur){
-  var n=prompt(u+" 积分",""+cur);if(!n)return;
-  var p=parseInt(n);if(isNaN(p)||p<0){showToast("无效");return}
-  await U("user_points","username=eq."+encodeURIComponent(u),{points:p,updated_at:new Date().toISOString()});
-  renderUserList();if(currentUser&&currentUser.username===u)updatePointsUI();
-  showToast(u+" 积分="+p);
-}
-
 async function recharge(){const u=$('rechargeUser').value.trim(),p=parseInt($('rechargePoints').value);if(!u||!p)return;const c=await dbGetPoints(u);await dbSetPoints(u,c+p);showToast(u+' +'+p+'积分')}
 
 function handleAuthBtn(){if(currentUser){logout()}else{$('authModal').classList.add('active')}}
@@ -277,7 +256,7 @@ async function updateAuthUI(){if(currentUser){$('usernameDisplay').textContent=c
 async function checkAdminAuth(){if(isAdmin)return true;const c=JSON.parse(localStorage.getItem('hbs_admin_creds')||'null');if(!c){const d=await Q('admin_users','limit=1');if(d[0])localStorage.setItem('hbs_admin_creds',JSON.stringify({username:d[0].username,password:d[0].password}));$('adminModalTitle').textContent=d[0]?'管理员登录':'首次设置管理员';$('adminSetupMode').style.display=d[0]?'none':'block';$('adminModal').classList.add('active');return false}$('adminModal').classList.add('active');return false}
 async function doAdminAuth(){const u=$('adminUsername').value.trim(),p=$('adminPassword').value.trim();if(!u||!p)return;const c=JSON.parse(localStorage.getItem('hbs_admin_creds')||'null');if(!c){const d=await Q('admin_users','limit=1');if(d[0]){if(u===d[0].username&&p===d[0].password){localStorage.setItem('hbs_admin_creds',JSON.stringify({username:u,password:p}));isAdmin=true;$('adminModal').classList.remove('active');switchPage('admin');return}showToast('密码错误');return}const cp=$('adminConfirmPw').value.trim();if(p!==cp)return;localStorage.setItem('hbs_admin_creds',JSON.stringify({username:u,password:p}));await D('admin_users','username=neq.__none__');await I('admin_users',{username:u,password:p,created_at:new Date().toISOString()});isAdmin=true;$('adminModal').classList.remove('active');switchPage('admin');return}if(u===c.username&&p===c.password){isAdmin=true;$('adminModal').classList.remove('active');switchPage('admin')}else showToast('密码错误')}
 
-async function switchPage(page){if(page==='admin'&&!isAdmin){await checkAdminAuth();if(!isAdmin)return}document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));$('page-'+page).classList.add('active');if(page==='library')await renderLibrary();if(page==='stats')await renderStats();if(page==='templates')renderTemplatesPage();if(page==='admin'){await renderCodeList();await renderUserList();$('apiKeyInput').value=getApiKey()}}
+async function switchPage(page){if(page==='admin'&&!isAdmin){await checkAdminAuth();if(!isAdmin)return}document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));$('page-'+page).classList.add('active');if(page==='library')await renderLibrary();if(page==='stats')await renderStats();if(page==='templates')renderTemplatesPage();if(page==='admin'){await renderCodeList();$('apiKeyInput').value=getApiKey()}}
 function renderTemplatesPage(){$('templateGrid').innerHTML=[{p:'regret',t:'后悔型',d:'先抛后悔制造悬念，再用细节反转成凡尔赛。'},{p:'gang',t:'杠精型',d:'正面硬刚，用供应链细节怼回去。'},{p:'honest',t:'实在型',d:'把差评公开，纠结后坚持自我。'},{p:'craft',t:'匠心型',d:'品质红线立人设，数字越具体越强。'}].map(x=>'<div class="library-card" onclick="loadTemplate(\''+x.p+'\')"><h3>'+PERSONAS[x.p].icon+' '+x.t+'</h3><p style="font-size:.78rem;color:var(--text2)">'+x.d+'</p></div>').join('')}
 function loadTemplate(pk){$('persona').value=pk;document.querySelectorAll('.persona-card').forEach(c=>c.classList.remove('active'));const c=document.querySelector('.persona-card[data-persona="'+pk+'"]');if(c)c.classList.add('active');switchPage('generator')}
 
@@ -292,32 +271,12 @@ function buildPrompt(pk,biz,city,ctLabel,dur,extra,core){
   '【口播结构·严格遵循】\n【0-3秒】情绪钩子——一句话反转预期，负面情绪优先（后悔/焦虑/愤怒/羞耻），让人停下滑动\n【3-45秒】展开故事/观点——具体画面（数字！细节！），情绪递进，制造起伏。用"事情"说话，不讲道理\n【45-'+(dur>70?'60':'收尾')+'秒】收尾——不喊口号不升华，停在具体的事上。像转身干活了一样\n\n'+
   '【去AI味铁律——违反任何一条都是失败】\n❌严禁：编造对话（"有个顾客跟我说…"、引号里的对白）、金句升华（"人生就是这样""所以我们要…"）、广告腔结尾（"欢迎来坐坐""关注我"）、排比对仗、正能量总结、鸡汤、煽情\n✅必须：像跟邻居聊天——不说教不总结不表演不煽情\n✅句子可以碎、有语气词（呢吧啊嘛嘿）、有停顿（用换行表示）、有口头禅式的重复\n✅真老板语气：有点累、有点倔、有点认命但也有点骄傲。像刚炒完菜擦擦手随口说的\n✅所有观点通过具体的"事"来说——不要直接讲道理\n✅数字比形容词有用100倍——不说"很新鲜"，说"三个小时前还在池子里游"\n✅话说完就停——不拖、不升华、不回头看观众\n\n'+
   '【四人设专属写法】\n后悔型：开头"我后悔了/我最后悔的事/我想过不干了"→细节展开辛酸→反转成凡尔赛（其实舍不得/其实挺骄傲/这店比命还重要）→低调收尾。语气：自嘲带骄傲，苦笑带倔强。关键词：手抖，扛不住了，没想到，认了\n杠精型：开头正面挑战质疑（"我今天就把话放这儿"）→用具体数字/供应链/手艺细节怼回去→霸气但不骂人。语气：就事论事的自信。关键词：你就告诉我，我用的，你自己看\n实在型：开头抛出被吐槽的问题（"你们天天说我家太X了"）→纠结过程→试了发现不行→宣布不改→给台阶（"你提前说，我帮你调"）。语气：接地气，犹豫过但坚定了。听劝人设最讨喜\n匠心型：用一条不可触碰的品质红线开场（"超过X小时我自己都不吃"）→展示每天真实流程→讲付出的代价→一句话总结。语气：沉稳不张扬但有底气。关键词：规矩、习惯、对得起、过不了自己那一关\n\n'+
-  '【输出前必须自检·不通过不发】
-1.有引号里的对白吗？→删掉
-2.有"XX说""我问""他说"吗？→删掉
-3.有"欢迎""关注""下期见"吗？→删掉
-4.第一句能让人停下来吗？→不行就换
-5.有真实数字/细节吗？→没有就加
-6.读一遍顺嘴吗？→不顺就改
-
-【输出格式】直接写完整脚本，时间标注不需精确配秒：\n【0-3秒 钩子】\n...\n【3-45秒 展开】\n...\n【收尾】\n...\n末尾附B-roll拍摄建议（每个时段配1-2句画面描述+拍摄技巧）\n\n【参考示范·后悔型川菜馆60秒】
-[0-3秒 钩子]
-我后悔了。花了四十万装修，桌子就摆了八张。
-
-[3-45秒 展开]
-装修队说这个墙要刷三遍，我说好。水泥还没干隔壁面馆就开张了，人家墙上挂个电视机就算完。我在后厨待了两个月，就为了把锅气搞对。油温多少、什么时候翻、颠几下，我师傅站旁边拿筷子敲我手。端出去客人吃了一口说"还行"。还行？我这两个月白挨打了呗。
-
-[收尾]
-后来想想，装修花那么多钱，桌子少放几张，大家吃得安静也挺好。反正我这店——就这八张桌子，不改了。
-
-B-roll: 老板擦手出厨房/后厨锅铲火焰特写(慢动作)/八张桌子的空间感/老板转身回厨房
-
-记住：你不是在写文案，你是在替一个真的餐饮老板说话。每句话都要像他刚炒完菜擦擦手对着手机说的。如果你写了任何引号里的对白或\"XX说\"，你就是失败的。';
+  '【输出格式】直接写完整脚本，时间标注不需精确配秒：\n【0-3秒 钩子】\n...\n【3-45秒 展开】\n...\n【收尾】\n...\n末尾附B-roll拍摄建议（每个时段配1-2句画面描述+拍摄技巧）\n\n记住：你不是在写文案，你是在替一个真的餐饮老板说话。每句话都要像他刚炒完菜擦擦手对着手机说的\n\n‼️最高优先级：不准编对白！不准任何引号内他人说话！。';
 }
 
 async function callAI(prompt){
   const key=getApiKey();if(!key)throw new Error('未配置');
-  const r=await fetch('https://api.deepseek.com/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+key},body:JSON.stringify({model:'deepseek-chat',messages:[{role:'system',content:prompt},{role:'user',content:'创作这条口播脚本'}],temperature:0.85,max_tokens:3000})});
+  const r=await fetch('https://api.deepseek.com/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+key},body:JSON.stringify({model:'deepseek-chat',messages:[{role:'system',content:prompt},{role:'user',content:'创作这条口播脚本。不准写任何引号对白，不准编“顾客说”'}],temperature:0.95,max_tokens:2000})});
   if(!r.ok)throw new Error((await r.json()).error?.message||'API错误');
   return (await r.json()).choices[0].message.content;
 }
